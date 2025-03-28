@@ -17,7 +17,7 @@
  * limitations under the License.
  * #L%
  */
-package com.flowingcode.vaadin.addons.template;
+package com.flowingcode.vaadin.addons.datetimerangepicker;
 
 import com.flowingcode.vaadin.addons.DemoLayout;
 import com.flowingcode.vaadin.addons.GithubLink;
@@ -27,12 +27,15 @@ import com.vaadin.flow.router.Route;
 
 @SuppressWarnings("serial")
 @ParentLayout(DemoLayout.class)
-@Route("template")
-@GithubLink("https://github.com/FlowingCode/AddonStarter24")
-public class TemplateDemoView extends TabbedDemo {
+@Route("datetimerange")
+@GithubLink("https://github.com/FlowingCode/DateTimeRangeSelector")
+public class DateTimeRangePickerTabbedView extends TabbedDemo {
 
-  public TemplateDemoView() {
-    addDemo(TemplateDemo.class);
+  public DateTimeRangePickerTabbedView() {
+    addDemo(ComponentDemo.class);
+    addDemo(BinderDemo.class);
+    addDemo(StatesDemo.class);
+    addDemo(ConstrainedDemo.class);
     setSizeFull();
   }
 }

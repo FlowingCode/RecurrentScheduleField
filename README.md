@@ -1,24 +1,38 @@
-[![Published on Vaadin Directory](https://img.shields.io/badge/Vaadin%20Directory-published-00b4f0.svg)](https://vaadin.com/directory/component/template-add-on)
-[![Stars on vaadin.com/directory](https://img.shields.io/vaadin-directory/star/template-add-on.svg)](https://vaadin.com/directory/component/template-add-on)
-[![Build Status](https://jenkins.flowingcode.com/job/template-addon/badge/icon)](https://jenkins.flowingcode.com/job/template-addon)
-[![Maven Central](https://img.shields.io/maven-central/v/com.flowingcode.vaadin.addons/template-addon)](https://mvnrepository.com/artifact/com.flowingcode.vaadin.addons/template-addon)
-[![Javadoc](https://img.shields.io/badge/javadoc-00b4f0)](https://javadoc.flowingcode.com/artifact/com.flowingcode.vaadin.addons/template-addon)
+[![Published on Vaadin Directory](https://img.shields.io/badge/Vaadin%20Directory-published-00b4f0.svg)](https://vaadin.com/directory/component/date-time-range-picker-add-on)
+[![Stars on vaadin.com/directory](https://img.shields.io/vaadin-directory/star/template-add-on.svg)](https://vaadin.com/directory/component/date-time-range-picker-add-on)
+[![Build Status](https://jenkins.flowingcode.com/job/template-addon/badge/icon)](https://jenkins.flowingcode.com/job/date-time-range-picker-addon)
+[![Maven Central](https://img.shields.io/maven-central/v/com.flowingcode.vaadin.addons/template-addon)](https://mvnrepository.com/artifact/com.flowingcode.vaadin.addons/date-time-range-picker-addon)
+[![Javadoc](https://img.shields.io/badge/javadoc-00b4f0)](https://javadoc.flowingcode.com/artifact/com.flowingcode.vaadin.addons/date-time-range-picker-addon)
 
-# Template Add-on
+# DateTimeRangePicker Add-on for Vaadin 24
 
-This is a template project for building new Vaadin 24 add-ons
+A component to create [Time Intervals](https://en.wikipedia.org/wiki/ISO_8601#Time_intervals) (_a time period defined by start and end points_) constrained by a time frame.
+
+You use the UI to define time and date ranges in which the time intervals should be created, and then call the API to operate them.
+
+As an example, you could set it to create an interval **every weekend** from **8:30 to 12:30 AM** between the
+**1st and 15th of May 2025**.<br>Then, you can make the following queries:
+
+1. How many intervals will be created? (4)
+2. Starting from today, when will the next interval occur?
+3. Is the 7th of May at 9:15 AM included in any interval? (It's not)
+   - How about the 5th of May at 9:00 AM? (Yes)
+4. How many intervals will have passed after the 9th of May? (2)
+5. How many intervals will remain after the 5th of May at 12:45? (3)
+
+... and more
 
 ## Features
-
-* List the features of your add-on in here
+- Customizable selection of date, time and days.
+- API to create and query time intervals.
 
 ## Online demo
 
-[Online demo here](http://addonsv24.flowingcode.com/template)
+[Online demo here](http://addonsv24.flowingcode.com/date-time-range-picker)
 
 ## Download release
 
-[Available in Vaadin Directory](https://vaadin.com/directory/component/template-add-on)
+[Available in Vaadin Directory](https://vaadin.com/directory/component/date-time-range-picker-add-on)
 
 ### Maven install
 
@@ -27,7 +41,7 @@ Add the following dependencies in your pom.xml file:
 ```xml
 <dependency>
    <groupId>com.flowingcode.vaadin.addons</groupId>
-   <artifactId>template-addon</artifactId>
+   <artifactId>date-time-range-picker-addon</artifactId>
    <version>X.Y.Z</version>
 </dependency>
 ```
@@ -44,7 +58,7 @@ To see the demo, navigate to http://localhost:8080/
 
 ## Release notes
 
-See [here](https://github.com/FlowingCode/TemplateAddon/releases)
+See [here](https://github.com/FlowingCode/date-time-range-picker-addon/releases)
 
 ## Issue tracking
 
@@ -69,13 +83,65 @@ Then, follow these steps for creating a contribution:
 
 This add-on is distributed under Apache License 2.0. For license terms, see LICENSE.txt.
 
-TEMPLATE_ADDON is written by Flowing Code S.A.
+DateTimeRangePicker is written by Flowing Code S.A.
 
 # Developer Guide
 
 ## Getting started
 
-Add your code samples in this section
+```
+    DateTimeRangePicker addon = new DateTimeRangePicker();    (1)
+    addon.setMinDate(LocalDate.now());                        (2)
+    addon.setMaxDate(LocalDate.now().plusDays(15));           (2)
+    addon.setWeekDays(DayOfWeek.MONDAY, DayOfWeek.FRIDAY);    (3)
+```
+- (1) Instantiation. 
+- (2) Date range selection will be constraint between **today** and **fifteen** days later.
+- (3) Component will have **Monday** and **Friday** selected by default.
+
+## Binding
+
+The API is exposed through the **DateTimeRange** class.
+
+```
+    DateTimeRangePicker addon = new DateTimeRangePicker();                        
+    Binder<Pojo> binder = new Binder<>(Pojo.class);                                 (1)
+    binder.forField(addon).bind(Pojo::getDateTimeRange, Pojo::setDateTimeRange);    (2) 
+    binder.setBean(pojo);                                                           (3)
+```
+ - (1) The **Pojo** class is binded using its getter and setter methods (2).
+ - (2) The **DateTimeRangePicker** is binded. Its [value](https://vaadin.com/api/platform/current/com/vaadin/flow/component/HasValue.html) can be operated now.
+ - (3) The **DateTimeRange** instance is saved in the **Pojo** class or returned from it.
+
+
+You can operate time intervals with the **DateTimeRange** class, which acts as a holder.
+
+```
+    TimeInterval interval = pojo.getDateTimeRange().getNextInterval();          (1)
+    boolean includes = pojo.getDateTimeRange().includes(LocalDateTime.now());   (2)
+```
+ - (1) "Starting from today, when will the next interval occur?"
+ - (2) "Is today included in any interval?"
+
+You can also use the **TimeInterval** instance directly.
+
+```
+    boolean includes = interval != null && interval.includes(LocalDateTime.now());
+```
+
+## I18n support
+
+Customize a ``DateTimeRangePickerI18n`` instance and pass it to the component (1).
+
+```
+    DateTimeRangePicker addon = new DateTimeRangePicker();
+    addon.setI18n(new DateTimeRangePickerI18n()                 (1)
+        .setDatesTitle("Your custom title")
+        .setTimeChipsText("AM", "PM", "AM + PM")
+        .setTimesPlaceholder("Start time", "End time")
+    );
+```
+
 
 ## Special configuration when using Spring
 

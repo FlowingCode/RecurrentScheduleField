@@ -1,0 +1,25 @@
+
+.fc-dtrp-circle {
+  left : calc((var(--lumo-space-m) + 12px - 6px) * -1);
+  background: var(--lumo-base-color);
+
+  div {
+    border-radius: 50%;
+    background: var(--lumo-primary-color);
+    min-height: 11px;
+    max-height: 11px;
+    min-width: 11px;
+    max-width: 11px;
+  }
+}
+
+.fc-dtrp-hoverable:hover, .fc-dtrp-selected {
+  background: var(--lumo-primary-color-50pct);
+  color: var(--lumo-primary-contrast-color);
+}
+
+.fc-dtrp-unselected {
+  background : initial
+}
+
+
