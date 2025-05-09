@@ -35,6 +35,9 @@ public class TimeInterval implements Serializable, Comparable<TimeInterval> {
   private final LocalDateTime endDate;
 
   public TimeInterval(LocalDateTime start, LocalDateTime end) {
+    if (!start.isBefore(end)) {
+      throw new IllegalArgumentException("start time must be before end time");
+    }
     this.startDate = start;
     this.endDate = end;
   }

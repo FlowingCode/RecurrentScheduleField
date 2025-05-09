@@ -39,17 +39,23 @@ import com.vaadin.flow.theme.lumo.LumoUtility.LineHeight;
 import com.vaadin.flow.theme.lumo.LumoUtility.Margin;
 import com.vaadin.flow.theme.lumo.LumoUtility.Padding;
 import com.vaadin.flow.theme.lumo.LumoUtility.Padding.Horizontal;
+import com.vaadin.flow.theme.lumo.LumoUtility.Padding.Left;
 import com.vaadin.flow.theme.lumo.LumoUtility.Padding.Vertical;
 import com.vaadin.flow.theme.lumo.LumoUtility.TextColor;
 import java.util.HashSet;
 import java.util.Set;
 
-// A single selection ChipGroup
+/**
+ * A UI component representing a group of single-selection chips.
+ * The group can be set to read-only mode, disabling user interaction.
+ * This component is styled using the "fc-dtrp" CSS classes.
+ */
 @CssImport("./styles/styles.css")
 class ChipGroup extends HorizontalLayout {
 
   private final Set<Chip> chips = new HashSet<>();
   private Chip checkedChip;
+  private boolean readOnly = false;
 
   public ChipGroup() {
     addClassNames(
@@ -57,7 +63,7 @@ class ChipGroup extends HorizontalLayout {
         JustifyContent.END,
         Gap.SMALL,
         FlexWrap.WRAP,
-        Horizontal.SMALL,
+        Left.SMALL,
         Vertical.SMALL
     );
   }
@@ -72,14 +78,9 @@ class ChipGroup extends HorizontalLayout {
   public Chip addChip(Chip chip) {
     chips.add(chip);
     chip.setParent(this);
+    chip.setReadOnly(readOnly);
     add(chip);
     return chip;
-  }
-
-  public boolean deleteChip(Chip chip) {
-    chip.setParent(null);
-    remove(chip);
-    return chips.remove(chip);
   }
 
   private void onChipChange(Chip chip) {
@@ -96,6 +97,7 @@ class ChipGroup extends HorizontalLayout {
   }
 
   public void setReadOnly(boolean readOnly) {
+    this.readOnly = readOnly;
     chips.forEach(c -> c.setReadOnly(readOnly));
   }
 
@@ -120,7 +122,6 @@ class ChipGroup extends HorizontalLayout {
           Display.INLINE_FLEX,
           Gap.SMALL
       );
-      getStyle().setCursor("pointer");
       checkIcon = VaadinIcon.CHECK.create();
       checkIcon.setSize("14px");
 
@@ -193,14 +194,12 @@ class ChipGroup extends HorizontalLayout {
         removeClassName("fc-dtrp-hoverable");
         removeClassName(TextColor.BODY);
         addClassName(TextColor.SECONDARY);
-        getStyle().setCursor("default");
-        getElement().getStyle().set("border-style", "dashed");
+        addClassName("fc-dtrp-readonly");
       } else {
-        addClassName("fc-dtrp-hoverable");
+        removeClassName("fc-dtrp-readonly");
         removeClassName(TextColor.SECONDARY);
+        addClassName("fc-dtrp-hoverable");
         addClassName(TextColor.BODY);
-        getElement().getStyle().set("border-style", "solid");
-        getStyle().setCursor("pointer");
       }
     }
 

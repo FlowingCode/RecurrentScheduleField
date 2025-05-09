@@ -21,69 +21,30 @@ package com.flowingcode.vaadin.addons.datetimerangepicker.ui;
 
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Paragraph;
-import com.vaadin.flow.theme.lumo.LumoUtility.AlignItems;
-import com.vaadin.flow.theme.lumo.LumoUtility.Display;
-import com.vaadin.flow.theme.lumo.LumoUtility.FlexDirection;
-import com.vaadin.flow.theme.lumo.LumoUtility.FontSize;
-import com.vaadin.flow.theme.lumo.LumoUtility.FontWeight;
-import com.vaadin.flow.theme.lumo.LumoUtility.JustifyContent;
-import com.vaadin.flow.theme.lumo.LumoUtility.LineHeight;
-import com.vaadin.flow.theme.lumo.LumoUtility.Margin;
-import com.vaadin.flow.theme.lumo.LumoUtility.Padding;
-import com.vaadin.flow.theme.lumo.LumoUtility.Padding.Bottom;
-import com.vaadin.flow.theme.lumo.LumoUtility.Padding.Horizontal;
-import com.vaadin.flow.theme.lumo.LumoUtility.TextAlignment;
-import com.vaadin.flow.theme.lumo.LumoUtility.Width;
 
-// Horizontal line between pickers
+/**
+ * A simple UI component representing a horizontal line with an optional label.
+ * The line is styled with the "fc-dtrp-linespan" CSS class.
+ * The label text can be set or cleared using the {@link #setText(String)} and {@link #setEmptyText()} methods.
+ */
 class SpanLine extends Div {
 
-  private final Paragraph text;
-  private static final String EMPTY = "\u200E";
+  private final Paragraph label = new Paragraph();
 
   public SpanLine() {
 
-    addClassNames(
-        Display.INLINE_FLEX,
-        FlexDirection.COLUMN,
-        AlignItems.CENTER,
-        Bottom.XSMALL,
-        Width.AUTO,
-        Horizontal.SMALL,
-        JustifyContent.END
-    );
-    setMinHeight("var(--lumo-size-m)");
-    setMaxHeight("var(--lumo-size-m)");
+    addClassName("fc-dtrp-linespan");
 
     Div line = new Div();
-    line.setMinWidth("4.5rem");
-    line.setMaxHeight("1px");
-    line.setMinHeight("1px");
-    line.getElement().getStyle().setBackgroundColor("var(--lumo-contrast-10pct)");
 
-    this.text = new Paragraph(EMPTY);
-    text.addClassNames(
-        TextAlignment.CENTER,
-        FontSize.SMALL,
-        Padding.NONE,
-        Margin.NONE,
-        FontWeight.SEMIBOLD,
-        LineHeight.SMALL
-    );
-    text.getStyle().setColor("var(--lumo-secondary-text-color)");
-
-    add(line, text);
-
+    add(line, label);
   }
 
   public void setText(String text) {
-    if (text.isEmpty()) {
-      text = EMPTY;
-    }
-    this.text.setText(text);
+    this.label.setText(text);
   }
 
   public void setEmptyText() {
-    this.text.setText(EMPTY);
+    this.label.setText("");
   }
 }

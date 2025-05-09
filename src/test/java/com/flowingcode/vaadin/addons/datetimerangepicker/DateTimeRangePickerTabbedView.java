@@ -1,8 +1,8 @@
 /*-
  * #%L
- * Template Add-on
+ * DateTimeRangePicker Add-on
  * %%
- * Copyright (C) 2024 Flowing Code
+ * Copyright (C) 2025 Flowing Code
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,7 +28,7 @@ import com.vaadin.flow.router.Route;
 @SuppressWarnings("serial")
 @ParentLayout(DemoLayout.class)
 @Route("datetimerange")
-@GithubLink("https://github.com/FlowingCode/DateTimeRangeSelector")
+@GithubLink("https://github.com/FlowingCode/DateTimeRangePicker")
 public class DateTimeRangePickerTabbedView extends TabbedDemo {
 
   public DateTimeRangePickerTabbedView() {

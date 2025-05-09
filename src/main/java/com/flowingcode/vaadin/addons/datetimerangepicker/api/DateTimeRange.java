@@ -32,7 +32,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * A class to operate {@link TimeInterval} instances based on defined date and time constraints<br>
+ * A class to operate {@link TimeInterval} instances based on defined date and time constraints
  *
  * @author Izaguirre, Ezequiel
  * @see TimeInterval
@@ -53,6 +53,9 @@ public class DateTimeRange implements Serializable {
 
 
   public DateTimeRange(LocalDate startDate, LocalDate endDate, Set<DayOfWeek> weekDays) {
+    if (!startDate.isBefore(endDate)) {
+      throw new IllegalArgumentException("startDate must be before endDate");
+    }
     this.startDate = startDate;
     this.endDate = endDate;
     setWeekDays(weekDays);
@@ -65,8 +68,7 @@ public class DateTimeRange implements Serializable {
   public DateTimeRange(LocalDate startDate, LocalDate endDate, LocalTime startTime, LocalTime endTime,
       Set<DayOfWeek> weekDays) {
     this(startDate, endDate, weekDays);
-    this.endTime = endTime;
-    this.startTime = startTime;
+    setDayDuration(startTime, endTime);
   }
 
   public DateTimeRange(LocalDate startDate, LocalDate endDate, LocalTime startTime, LocalTime endTime) {
@@ -80,6 +82,9 @@ public class DateTimeRange implements Serializable {
    * @param endTime   the ending point (exclusive).
    */
   public void setDayDuration(LocalTime startTime, LocalTime endTime) {
+    if (!startTime.isBefore(endTime)) {
+      throw new IllegalArgumentException("startTime must be before endTime");
+    }
     this.startTime = startTime;
     this.endTime = endTime;
   }
@@ -90,6 +95,9 @@ public class DateTimeRange implements Serializable {
    * @param weekDays a list of days
    */
   public void setWeekDays(Set<DayOfWeek> weekDays) {
+    if(weekDays == null) {
+      throw new IllegalArgumentException("weekDays can't be null");
+    }
     DayOfWeek[] allWeekDays = DayOfWeek.values();
 
     for (int i = 0; i < allWeekDays.length; i++) {
@@ -263,9 +271,9 @@ public class DateTimeRange implements Serializable {
   }
 
   /**
-   * Gets the amount of days between the start and (exclusive) end dates
+   * Gets the period between the start and (exclusive) end dates
    */
-  public Period getDaysSpan() {
+  public Period getDatesPeriod() {
     return Period.between(startDate, endDate);
   }
 
@@ -321,8 +329,8 @@ public class DateTimeRange implements Serializable {
     LocalDate startDate = from.toLocalDate();
     LocalTime startTime = from.toLocalTime();
     LocalDate endDate = to.toLocalDate();
-    int days = Period.between(startDate, endDate).getDays();
-    int i = 0;
+    long days = java.time.temporal.ChronoUnit.DAYS.between(startDate, endDate);
+    long i = 0;
     List<TimeInterval> entities = new ArrayList<>();
     DayOfWeek firstDay = startDate.getDayOfWeek();
     if (this.weekDays[firstDay.getValue() - 1] == null || !this.endTime.isAfter(startTime)) {

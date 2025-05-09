@@ -31,8 +31,22 @@ import java.util.List;
  */
 public class DateTimeRangePickerI18n implements Serializable {
 
-  DateTimeRangePicker component;
-  final SerializableRunnable[] actions = {null, null, null, null, null, null, null, null};
+  private DateTimeRangePicker component;
+  private final SerializableRunnable[] actions = {null, null, null, null, null, null, null, null};
+
+  void attachComponent(DateTimeRangePicker component) {
+    this.component = component;
+  }
+
+  SerializableRunnable[] getPendingActions() {
+    return actions;
+  }
+
+  private void addAction(SerializableRunnable action, int index) {
+    actions[index] = action;
+    if(component != null) action.run();
+  }
+
 
   /**
    * Sets the date pickers' title
@@ -40,11 +54,7 @@ public class DateTimeRangePickerI18n implements Serializable {
    * @param text   title for the pickers
    */
   public DateTimeRangePickerI18n setDatesTitle(String text) {
-    SerializableRunnable action = () -> {
-      component.datesTitle.setText(text);
-    };
-    actions[0] = action;
-    if(component != null) action.run();
+    addAction(() -> component.getDatesTitle().setText(text), 0);
     return this;
   }
 
@@ -54,7 +64,7 @@ public class DateTimeRangePickerI18n implements Serializable {
    * @return date pickers' title or {@code null} if this object is not attached to a {@code DateTimeRangePicker} instance
    */
   public String getDatesTitle() {
-    return component != null ? component.datesTitle.toString() : null;
+    return component != null ? component.getDatesTitle().getText() : null;
   }
 
   /**
@@ -63,11 +73,7 @@ public class DateTimeRangePickerI18n implements Serializable {
    * @param text   title for the days picker
    */
   public DateTimeRangePickerI18n setDaysTitle(String text) {
-    SerializableRunnable action = () -> {
-      component.daysTitle.setText(text);
-    };
-    actions[1] = action;
-    if(component != null) action.run();
+    addAction(() -> component.getDaysTitle().setText(text), 1);
     return this;
   }
 
@@ -77,7 +83,7 @@ public class DateTimeRangePickerI18n implements Serializable {
    * @return days picker's title or {@code null} if this object is not attached to a {@code DateTimeRangePicker} instance
    */
   public String getDaysTitle() {
-    return component != null ? component.daysTitle.toString() : null;
+    return component != null ? component.getDaysTitle().getText() : null;
   }
 
   /**
@@ -86,11 +92,7 @@ public class DateTimeRangePickerI18n implements Serializable {
    * @param text   title for the pickers
    */
   public DateTimeRangePickerI18n setTimesTitle(String text) {
-    SerializableRunnable action = () -> {
-      component.timesTitle.setText(text);
-    };
-    actions[2] = action;
-    if(component != null) action.run();
+    addAction(() -> component.getTimesTitle().setText(text), 2);
     return this;
   }
 
@@ -100,7 +102,7 @@ public class DateTimeRangePickerI18n implements Serializable {
    * @return time pickers' title or {@code null} if this object is not attached to a {@code DateTimeRangePicker} instance
    */
   public String getTimesTitle() {
-    return component != null ? component.timesTitle.toString() : null;
+    return component != null ? component.getTimesTitle().getText() : null;
   }
 
   /**
@@ -110,12 +112,10 @@ public class DateTimeRangePickerI18n implements Serializable {
    * @param endTime     placeholder for the end-time picker
    */
   public DateTimeRangePickerI18n setTimesPlaceholder(String startTime, String endTime) {
-    SerializableRunnable action = () -> {
-      component.startTime.setPlaceholder(startTime);
-      component.endTime.setPlaceholder(endTime);
-    };
-    actions[3] = action;
-    if(component != null) action.run();
+    addAction(() -> {
+      component.getStartTime().setPlaceholder(startTime);
+      component.getEndTime().setPlaceholder(endTime);
+    }, 3);
     return this;
   }
 
@@ -127,7 +127,10 @@ public class DateTimeRangePickerI18n implements Serializable {
    * <br><br>{@code null} if this object is not attached to a {@code DateTimeRangePicker} instance
    */
   public List<String> getTimesPlaceholder() {
-    return component != null ? List.of(component.startTime.getPlaceholder(), component.endTime.getPlaceholder()) : null;
+    return component != null ? List.of(
+        component.getStartTime().getPlaceholder(),
+        component.getEndTime().getPlaceholder()
+    ) : null;
   }
 
   /**
@@ -137,12 +140,10 @@ public class DateTimeRangePickerI18n implements Serializable {
    * @param endDate     placeholder for the end-date picker
    */
   public DateTimeRangePickerI18n setDatesPlaceholder(String startDate, String endDate) {
-    SerializableRunnable action = () -> {
-      component.startDate.setPlaceholder(startDate);
-      component.endDate.setPlaceholder(endDate);
-    };
-    actions[4] = action;
-    if(component != null) action.run();
+    addAction(() -> {
+      component.getStartDate().setPlaceholder(startDate);
+      component.getEndDate().setPlaceholder(endDate);
+    }, 4);
     return this;
   }
 
@@ -154,7 +155,10 @@ public class DateTimeRangePickerI18n implements Serializable {
    * <br><br>{@code null} if this object is not attached to a {@code DateTimeRangePicker} instance
    */
   public List<String> getDatesPlaceholder() {
-    return component != null ? List.of(component.startDate.getPlaceholder(), component.endDate.getPlaceholder()) : null;
+    return component != null ? List.of(
+        component.getStartDate().getPlaceholder(),
+        component.getEndDate().getPlaceholder()
+    ) : null;
   }
 
   /**
@@ -165,12 +169,13 @@ public class DateTimeRangePickerI18n implements Serializable {
    * @see DateTimeRangePicker#setFirstWeekDay(DayOfWeek)
    */
   public DateTimeRangePickerI18n setDayInitials(List<String> initials) {
-    SerializableRunnable action = () -> {
-      component.daysInitials = initials;
-      component.weekDays.setWeekDaysShort(initials);
-    };
-    actions[5] = action;
-    if(component != null) action.run();
+    if (initials == null || initials.size() != 7) {
+      throw new IllegalArgumentException("Exactly 7 day initials are required");
+    }
+    addAction(() -> {
+      component.setDaysInitials(initials);
+      component.getWeekDays().setWeekDaysShort(initials);
+    }, 5);
     return this;
   }
 
@@ -183,7 +188,7 @@ public class DateTimeRangePickerI18n implements Serializable {
    * @see DateTimeRangePicker#setFirstWeekDay(DayOfWeek)
    */
   public List<String> getDayInitials() {
-    return component != null ? component.daysInitials : null;
+    return component != null ? component.getDaysInitials() : null;
   }
 
   /**
@@ -194,13 +199,11 @@ public class DateTimeRangePickerI18n implements Serializable {
    * @param all           text for the all-day chip
    */
   public DateTimeRangePickerI18n setTimeChipsText(String morning, String afternoon, String all) {
-    SerializableRunnable action = () -> {
-      component.morningChip.setText(morning);
-      component.afterNoonChip.setText(afternoon);
-      component.allTimeChip.setText(all);
-    };
-    actions[6] = action;
-    if(component != null) action.run();
+    addAction(() -> {
+      component.getMorningChip().setText(morning);
+      component.getAfterNoonChip().setText(afternoon);
+      component.getAllTimeChip().setText(all);
+    }, 6);
     return this;
   }
 
@@ -215,9 +218,9 @@ public class DateTimeRangePickerI18n implements Serializable {
    */
   public List<String> getTimeChipsText() {
     return component != null ? List.of(
-        component.morningChip.getText(),
-        component.afterNoonChip.getText(),
-        component.allTimeChip.getText()
+        component.getMorningChip().getText(),
+        component.getAfterNoonChip().getText(),
+        component.getAllTimeChip().getText()
     ) : null;
   }
 
@@ -229,13 +232,11 @@ public class DateTimeRangePickerI18n implements Serializable {
    * @param all           text for the all days chip
    */
   public DateTimeRangePickerI18n setDaysChipsText(String weekdays, String weekend, String all) {
-    SerializableRunnable action = () -> {
-      component.weekdaysChip.setText(weekdays);
-      component.weekendChip.setText(weekend);
-      component.allDaysChip.setText(all);
-    };
-    actions[7] = action;
-    if(component != null) action.run();
+    addAction(() -> {
+      component.getWeekdaysChip().setText(weekdays);
+      component.getWeekendChip().setText(weekend);
+      component.getAllDaysChip().setText(all);
+    }, 7);
     return this;
   }
 
@@ -250,10 +251,9 @@ public class DateTimeRangePickerI18n implements Serializable {
    */
   public List<String> getDaysChipsText() {
     return component != null ? List.of(
-        component.weekdaysChip.getText(),
-        component.weekendChip.getText(),
-        component.allDaysChip.getText()
+        component.getWeekdaysChip().getText(),
+        component.getWeekendChip().getText(),
+        component.getAllDaysChip().getText()
     ) : null;
   }
-
 }

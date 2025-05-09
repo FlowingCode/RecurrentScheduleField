@@ -1,7 +1,63 @@
+.fc-dtrp-hoverable:hover, .fc-dtrp-selected {
+  background: var(--lumo-primary-color-50pct);
+  color: var(--lumo-primary-contrast-color);
+  cursor: pointer;
+  border-style: solid;
+}
+
+.fc-dtrp-readonly {
+  cursor: default;
+  border-style: dashed;
+}
+
+.fc-dtrp-unselected {
+  background : initial
+}
+
+.fc-dtrp-linespan {
+  display : inline-flex;
+  align-items : center;
+  justify-content : center;
+  min-height : calc(var(--lumo-text-field-size) + 2 * var(--lumo-space-xs));
+  max-height : calc(var(--lumo-text-field-size) + 2 * var(--lumo-space-xs));
+  min-width: 4.5rem;
+  position: relative;
+
+  div {
+    min-height: 1px;
+    max-height: 1px;
+    background: var(--lumo-contrast-10pct);
+    flex-grow: 1;
+  }
+
+  p {
+      position: absolute;
+      left: 0;
+      right: 0;
+      margin: auto;
+      color : var(--lumo-secondary-text-color);
+      background : var(--lumo-base-color);
+      display: inline;
+      width: fit-content;
+      font-size: var(--lumo-font-size-s);
+      line-height: var(--lumo-font-size-s);
+      padding-right: var(--lumo-space-xs);
+      padding-left: var(--lumo-space-xs);
+      padding-top: 0;
+      padding-bottom: 0;
+  }
+}
 
 .fc-dtrp-circle {
   left : calc((var(--lumo-space-m) + 12px - 6px) * -1);
   background: var(--lumo-base-color);
+  position: absolute;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  padding-top: var(--lumo-space-xs);
+  padding-bottom: var(--lumo-space-xs);
 
   div {
     border-radius: 50%;
@@ -11,15 +67,6 @@
     min-width: 11px;
     max-width: 11px;
   }
-}
-
-.fc-dtrp-hoverable:hover, .fc-dtrp-selected {
-  background: var(--lumo-primary-color-50pct);
-  color: var(--lumo-primary-contrast-color);
-}
-
-.fc-dtrp-unselected {
-  background : initial
 }
 
 
