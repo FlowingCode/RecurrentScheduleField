@@ -4,7 +4,7 @@
 [![Maven Central](https://img.shields.io/maven-central/v/com.flowingcode.vaadin.addons/date-time-range-picker-addon)](https://mvnrepository.com/artifact/com.flowingcode.vaadin.addons/date-time-range-picker-addon)
 [![Javadoc](https://img.shields.io/badge/javadoc-00b4f0)](https://javadoc.flowingcode.com/artifact/com.flowingcode.vaadin.addons/date-time-range-picker-addon)
 
-# DateTimeRangePicker Add-on for Vaadin 24
+# Date Time Range Picker Add-on for Vaadin 24
 
 A component to create [Time Intervals](https://en.wikipedia.org/wiki/ISO_8601#Time_intervals) (_a time period defined by start and end points_) constrained by a time frame.
 
@@ -58,7 +58,7 @@ To see the demo, navigate to http://localhost:8080/
 
 ## Release notes
 
-See [here](https://github.com/FlowingCode/date-time-range-picker-addon/releases)
+See [here](https://github.com/FlowingCode/DateTimeRangePicker/releases)
 
 ## Issue tracking
 
@@ -83,7 +83,7 @@ Then, follow these steps for creating a contribution:
 
 This add-on is distributed under Apache License 2.0. For license terms, see LICENSE.txt.
 
-DateTimeRangePicker is written by Flowing Code S.A.
+Date Time Range Picker Add-on is written by Flowing Code S.A.
 
 # Developer Guide
 
