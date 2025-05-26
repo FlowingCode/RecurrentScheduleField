@@ -22,7 +22,10 @@ package com.flowingcode.vaadin.addons.datetimerangepicker.ui;
 import com.vaadin.flow.function.SerializableRunnable;
 import java.io.Serializable;
 import java.time.DayOfWeek;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * A class to help internationalize {@link DateTimeRangePicker} instances
@@ -32,19 +35,21 @@ import java.util.List;
 public class DateTimeRangePickerI18n implements Serializable {
 
   private DateTimeRangePicker component;
-  private final SerializableRunnable[] actions = {null, null, null, null, null, null, null, null};
+  private final Map<String, SerializableRunnable> actions = new HashMap<>();
 
   void attachComponent(DateTimeRangePicker component) {
     this.component = component;
   }
 
-  SerializableRunnable[] getPendingActions() {
-    return actions;
+  Collection<SerializableRunnable> getPendingActions() {
+    return actions.values();
   }
 
-  private void addAction(SerializableRunnable action, int index) {
-    actions[index] = action;
-    if(component != null) action.run();
+  private void addAction(SerializableRunnable action, String function) {
+    actions.put(function, action);
+    if (component != null) {
+      action.run();
+    }
   }
 
 
@@ -54,7 +59,7 @@ public class DateTimeRangePickerI18n implements Serializable {
    * @param text   title for the pickers
    */
   public DateTimeRangePickerI18n setDatesTitle(String text) {
-    addAction(() -> component.getDatesTitle().setText(text), 0);
+    addAction(() -> component.getDatesTitle().setText(text), "setDatesTitle");
     return this;
   }
 
@@ -73,7 +78,7 @@ public class DateTimeRangePickerI18n implements Serializable {
    * @param text   title for the days picker
    */
   public DateTimeRangePickerI18n setDaysTitle(String text) {
-    addAction(() -> component.getDaysTitle().setText(text), 1);
+    addAction(() -> component.getDaysTitle().setText(text), "setDaysTitle");
     return this;
   }
 
@@ -92,7 +97,7 @@ public class DateTimeRangePickerI18n implements Serializable {
    * @param text   title for the pickers
    */
   public DateTimeRangePickerI18n setTimesTitle(String text) {
-    addAction(() -> component.getTimesTitle().setText(text), 2);
+    addAction(() -> component.getTimesTitle().setText(text), "setTimesTitle");
     return this;
   }
 
@@ -115,7 +120,7 @@ public class DateTimeRangePickerI18n implements Serializable {
     addAction(() -> {
       component.getStartTime().setPlaceholder(startTime);
       component.getEndTime().setPlaceholder(endTime);
-    }, 3);
+    }, "setTimesPlaceholder");
     return this;
   }
 
@@ -143,7 +148,7 @@ public class DateTimeRangePickerI18n implements Serializable {
     addAction(() -> {
       component.getStartDate().setPlaceholder(startDate);
       component.getEndDate().setPlaceholder(endDate);
-    }, 4);
+    }, "setDatesPlaceholder");
     return this;
   }
 
@@ -175,7 +180,7 @@ public class DateTimeRangePickerI18n implements Serializable {
     addAction(() -> {
       component.setDaysInitials(initials);
       component.getWeekDays().setWeekDaysShort(initials);
-    }, 5);
+    }, "setDayInitials");
     return this;
   }
 
@@ -203,7 +208,7 @@ public class DateTimeRangePickerI18n implements Serializable {
       component.getMorningChip().setText(morning);
       component.getAfterNoonChip().setText(afternoon);
       component.getAllTimeChip().setText(all);
-    }, 6);
+    }, "setTimeChipsText");
     return this;
   }
 
@@ -236,7 +241,7 @@ public class DateTimeRangePickerI18n implements Serializable {
       component.getWeekdaysChip().setText(weekdays);
       component.getWeekendChip().setText(weekend);
       component.getAllDaysChip().setText(all);
-    }, 7);
+    }, "setDaysChipsText");
     return this;
   }
 

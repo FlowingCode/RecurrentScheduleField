@@ -27,9 +27,9 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.Period;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * A class to operate {@link TimeInterval} instances based on defined date and time constraints
@@ -45,9 +45,7 @@ public class DateTimeRange implements Serializable {
 
   private final LocalDate startDate;
   private final LocalDate endDate;
-  private final DayOfWeek[] weekDays = {
-      null, null, null, null, null, null, null
-  };
+  private final TreeSet<DayOfWeek> weekDays = new TreeSet<>();
   private LocalTime startTime = defaultStartTime;
   private LocalTime endTime = defaultEndTime;
 
@@ -90,62 +88,59 @@ public class DateTimeRange implements Serializable {
   }
 
   /**
-   * Defines on which days of the week an interval should exist
+   * Defines on which days of the week intervals are defined
    *
    * @param weekDays a list of days
    */
   public void setWeekDays(Set<DayOfWeek> weekDays) {
-    if(weekDays == null) {
-      throw new IllegalArgumentException("weekDays can't be null");
+    if(weekDays == null || weekDays.isEmpty()) {
+      throw new IllegalArgumentException("weekDays can't be null or empty");
     }
-    DayOfWeek[] allWeekDays = DayOfWeek.values();
-
-    for (int i = 0; i < allWeekDays.length; i++) {
-      if (weekDays.contains(allWeekDays[i])) {
-        this.weekDays[i] = allWeekDays[i];
-      } else {
-        this.weekDays[i] = null;
-      }
-    }
+    this.weekDays.clear();
+    this.weekDays.addAll(weekDays);
   }
 
   /**
-   * Shorthand for <code>setWeekDays</code> with the entire week set
+   * Sets the week days to include all days of the week.
+   * This is equivalent to calling <code>setWeekDays</code> with all days.
    */
   public void setAllWeekDays() {
     this.setWeekDays(Set.of(DayOfWeek.values()));
   }
 
   /**
-   * Returns the days of the week when intervals exist
+   * Returns the days of the week on which intervals are defined
+   *
+   * @return an immutable set of {@link DayOfWeek}
    */
   public Set<DayOfWeek> getWeekDays() {
-    Set<DayOfWeek> days = new HashSet<>();
-    for (DayOfWeek day : this.weekDays) {
-      if (day != null) {
-        days.add(day);
-      }
-    }
-    return days;
+    return Set.copyOf(weekDays);
   }
 
-  /**
-   * Gets the intervals that conform to current constraints
-   */
+/**
+ * Gets the intervals that conform to the current date, time, and weekday constraints.
+ * Each interval represents a time range within the defined start and end dates,
+ * and only includes the specified days of the week
+ *
+ * @return a list of {@link TimeInterval} objects sorted by their time range
+ */
   public List<TimeInterval> getIntervals() {
     return generateIntervals(this.startDate.atTime(this.startTime), this.endDate.atTime(this.endTime));
   }
 
-  /**
-   * Checks if the given {@link LocalDate} is between any interval
-   */
+/**
+ * Checks if the given {@link LocalDate} falls within any interval.
+ *
+ * @return {@code true} if the argument is within an interval, {@code false} otherwise
+ */
   public boolean includes(LocalDate date) {
-    int index = date.getDayOfWeek().getValue() - 1;
-    return this.weekDays[index] != null && insideRange(date);
+    return weekDays.contains(date.getDayOfWeek()) && insideRange(date);
   }
 
   /**
-   * Checks if the given {@link LocalDateTime} is between any interval
+   * Checks if the given {@link LocalDateTime} falls within any interval
+   *
+   * @return {@code true} if the argument is within an interval, {@code false} otherwise
    */
   public boolean includes(LocalDateTime dateTime) {
     boolean contains = false;
@@ -162,7 +157,9 @@ public class DateTimeRange implements Serializable {
   }
 
   /**
-   * Gets the next interval that ends after given {@link LocalDate}
+   * Gets the next interval that ends after the given {@link LocalDate}
+   *
+   * @return the next {@link TimeInterval} after the given date, or {@code null} if no such interval exists
    */
   public TimeInterval getNextInterval(LocalDate from) {
     LocalDateTime dateTime = LocalDateTime.of(from, this.startTime);
@@ -170,22 +167,25 @@ public class DateTimeRange implements Serializable {
   }
 
   /**
-   * Gets the next interval that ends after current time
+   * Gets the next interval that ends after the current date and time
+   *
+   * @return the next {@link TimeInterval} after the current date and time, or {@code null} if no such interval exists
    */
   public TimeInterval getNextInterval() {
     return this.getNextInterval(LocalDateTime.now());
   }
 
   /**
-   * Gets the next interval that ends after given {@link LocalDateTime}
+   * Gets the next interval that ends after the given {@link LocalDateTime}
+   *
+   * @return the next {@link TimeInterval} after the given date, or {@code null} if no such interval exists
    */
   public TimeInterval getNextInterval(LocalDateTime from) {
     LocalDate date = from.toLocalDate();
     LocalTime time = from.toLocalTime();
     TimeInterval interval = null;
 
-    int index = date.getDayOfWeek().getValue() - 1;
-    if (this.weekDays[index] == null) {
+    if (!weekDays.contains(from.getDayOfWeek())) {
       DayOfWeek nextWeekDay = getNextDay(date.getDayOfWeek());
       date = date.plusDays(daysBetween(nextWeekDay, date.getDayOfWeek()));
     }
@@ -211,14 +211,18 @@ public class DateTimeRange implements Serializable {
   }
 
   /**
-   * Gets the intervals that end after current time
+   * Gets the intervals that end after the current date and time.
+   *
+   * @return a list of {@link TimeInterval} objects representing the remaining intervals
    */
   public List<TimeInterval> getIntervalsLeft() {
     return this.getIntervalsLeft(LocalDateTime.now());
   }
 
   /**
-   * Gets the intervals that end after {@link LocalDateTime}
+   * Gets the intervals that end after given {@link LocalDateTime}.
+   *
+   * @return a list of {@link TimeInterval} objects representing the remaining intervals
    */
   public List<TimeInterval> getIntervalsLeft(LocalDateTime from) {
     List<TimeInterval> result = new ArrayList<>();
@@ -232,14 +236,18 @@ public class DateTimeRange implements Serializable {
   }
 
   /**
-   * Gets the intervals that end after given {@link LocalDate}
+   * Gets the intervals that end after given {@link LocalDate}.
+   *
+   * @return a list of {@link TimeInterval} objects representing the remaining intervals
    */
   public List<TimeInterval> getIntervalsLeft(LocalDate from) {
     return this.getIntervalsLeft(from.atTime(LocalTime.MIN));
   }
 
   /**
-   * Gets the intervals that ended before current time
+   * Gets the intervals that ended before the current date and time.
+   *
+   * @return a list of {@link TimeInterval} objects representing the past intervals
    */
   public List<TimeInterval> getPastIntervals() {
     return this.getPastIntervals(LocalDateTime.now());
@@ -247,6 +255,8 @@ public class DateTimeRange implements Serializable {
 
   /**
    * Gets the intervals that ended before given {@link LocalDate}
+   *
+   * @return a list of {@link TimeInterval} objects representing the past intervals
    */
   public List<TimeInterval> getPastIntervals(LocalDate from) {
     return this.getPastIntervals(from.atTime(LocalTime.MIN));
@@ -254,6 +264,8 @@ public class DateTimeRange implements Serializable {
 
   /**
    * Gets the intervals that ended before given {@link LocalDateTime}
+   *
+   * @return a list of {@link TimeInterval} objects representing the past intervals
    */
   public List<TimeInterval> getPastIntervals(LocalDateTime from) {
     TimeInterval nextInterval = getNextInterval(from);
@@ -264,7 +276,10 @@ public class DateTimeRange implements Serializable {
   }
 
   /**
-   * Gets the time interval duration (or time period)
+   * Gets the time duration (or time period) of an interval.
+   * The duration is calculated as the difference between the start and (exclusive) end times
+   *
+   * @return a {@link Duration} representing the length of an interval
    */
   public Duration getDayDuration() {
     return Duration.between(startTime, endTime);
@@ -307,14 +322,11 @@ public class DateTimeRange implements Serializable {
 
   // Utils
   private DayOfWeek getNextDay(DayOfWeek previous) {
-    int index = previous.getValue() - 1;
-    DayOfWeek[] allWeekDays = DayOfWeek.values();
-    DayOfWeek next;
-    do {
-      index = (index + 1) % allWeekDays.length;
+    DayOfWeek current = previous.plus(1);
+    while(!weekDays.contains(current)) {
+      current = current.plus(1);
     }
-    while ((next = this.weekDays[index]) == null);
-    return next;
+    return current;
   }
 
   private int daysBetween(DayOfWeek to, DayOfWeek from) {
@@ -333,7 +345,7 @@ public class DateTimeRange implements Serializable {
     long i = 0;
     List<TimeInterval> entities = new ArrayList<>();
     DayOfWeek firstDay = startDate.getDayOfWeek();
-    if (this.weekDays[firstDay.getValue() - 1] == null || !this.endTime.isAfter(startTime)) {
+    if (!weekDays.contains(firstDay) || !this.endTime.isAfter(startTime)) {
       DayOfWeek nextDay = getNextDay(startDate.getDayOfWeek());
       i = daysBetween(nextDay, firstDay);
     }

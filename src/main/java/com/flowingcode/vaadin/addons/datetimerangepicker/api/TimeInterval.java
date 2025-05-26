@@ -43,21 +43,23 @@ public class TimeInterval implements Serializable, Comparable<TimeInterval> {
   }
 
   /**
-   * Returns the starting point of this interval
+   * Returns the starting time of this interval
    */
   public LocalDateTime getStartDate() {
     return startDate;
   }
 
   /**
-   * Returns the (exclusive) ending point of this interval
+   * Returns the (exclusive) ending time of this interval
    */
   public LocalDateTime getEndDate() {
     return endDate;
   }
 
   /**
-   * Checks whether the given {@link LocalDateTime} falls within this time interval
+   * Checks whether the given {@link LocalDateTime} falls within this interval
+   *
+   * @return {@code true} if the argument is within this interval, {@code false} otherwise
    */
   public boolean includes(LocalDateTime date) {
     boolean startCheck = startDate.isBefore(date) || startDate.equals(date);
@@ -66,21 +68,28 @@ public class TimeInterval implements Serializable, Comparable<TimeInterval> {
   }
 
   /**
-   * Checks whether this interval happens before the specified {@link LocalDateTime}
+   * Checks whether this interval falls before the specified {@link LocalDateTime}
+   *
+   * @return {@code true} if this interval is before, {@code false} otherwise
    */
   public boolean isBefore(LocalDateTime date) {
     return endDate.isBefore(date) || endDate.equals(date);
   }
 
   /**
-   * Checks whether this interval happens after the specified {@link LocalDateTime}
+   * Checks whether this interval falls after the specified {@link LocalDateTime}
+   *
+   * @return {@code true} if this interval is after, {@code false} otherwise
    */
   public boolean isAfter(LocalDateTime date) {
     return startDate.isAfter(date);
   }
 
   /**
-   * Returns the time duration (or time period) of this interval
+   * Gets the time duration (or time period) of this interval.
+   * The duration is calculated as the difference between the start and (exclusive) end times
+   *
+   * @return a {@link Duration} representing the length of an interval
    */
   public Duration getDuration() {
     return Duration.between(startDate.toLocalTime(), endDate.toLocalTime());
