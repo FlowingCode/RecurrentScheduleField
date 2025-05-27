@@ -4,14 +4,14 @@
 [![Maven Central](https://img.shields.io/maven-central/v/com.flowingcode.vaadin.addons/date-time-range-picker-addon)](https://mvnrepository.com/artifact/com.flowingcode.vaadin.addons/date-time-range-picker-addon)
 [![Javadoc](https://img.shields.io/badge/javadoc-00b4f0)](https://javadoc.flowingcode.com/artifact/com.flowingcode.vaadin.addons/date-time-range-picker-addon)
 
-# Date Time Range Picker Add-on for Vaadin 24
+# Date Time Range Picker Add-on
 
-A component to create [Time Intervals](https://en.wikipedia.org/wiki/ISO_8601#Time_intervals) (_a time period defined by start and end points_) constrained by a time frame.
+A Vaadin 24 component for creating and managing [time intervals](https://en.wikipedia.org/wiki/ISO_8601#Time_intervals) (_a time period defined by start and end points_) within a defined date and time range.
 
-You use the UI to define time and date ranges in which the time intervals should be created, and then call the API to operate them.
+Includes a UI to define time and date ranges along with an API to query the intervals.
 
-As an example, you could set it to create an interval **every weekend** from **8:30 to 12:30 AM** between the
-**1st and 15th of May 2025**.<br>Then, you can make the following queries:
+As an example, you could define an interval to happen **every weekend** from **8:30 to 12:30 AM** between the
+**1st and 15th of May 2025**.<br>Then, use the returned object to make the following queries:
 
 1. How many intervals will be created? (4)
 2. Starting from today, when will the next interval occur?
@@ -123,7 +123,7 @@ You can operate time intervals with the **DateTimeRange** class, which acts as a
  - (1) "Starting from today, when will the next interval occur?"
  - (2) "Is today included in any interval?"
 
-You can also use the **TimeInterval** instance directly.
+You can also call a single **TimeInterval** instance directly.
 
 ```
     boolean includes = interval != null && interval.includes(LocalDateTime.now());

@@ -37,7 +37,7 @@ import java.util.Map;
 
 @PageTitle("States")
 @SuppressWarnings("serial")
-@Route(value = "dtrp/states", layout = DateTimeRangePickerTabbedView.class)
+@Route(value = "datetimerange/states", layout = DateTimeRangePickerTabbedView.class)
 @DemoSource
 public class StatesDemo extends VerticalLayout {
 

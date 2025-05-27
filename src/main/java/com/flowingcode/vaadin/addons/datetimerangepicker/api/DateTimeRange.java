@@ -19,6 +19,8 @@
  */
 package com.flowingcode.vaadin.addons.datetimerangepicker.api;
 
+import static java.time.temporal.ChronoUnit.DAYS;
+
 import java.io.Serializable;
 import java.time.DayOfWeek;
 import java.time.Duration;
@@ -77,7 +79,7 @@ public class DateTimeRange implements Serializable {
    * Sets time boundaries for the intervals
    *
    * @param startTime the starting point
-   * @param endTime   the ending point (exclusive).
+   * @param endTime   the ending point (exclusive)
    */
   public void setDayDuration(LocalTime startTime, LocalTime endTime) {
     if (!startTime.isBefore(endTime)) {
@@ -101,8 +103,8 @@ public class DateTimeRange implements Serializable {
   }
 
   /**
-   * Sets the week days to include all days of the week.
-   * This is equivalent to calling <code>setWeekDays</code> with all days.
+   * Sets the week days to include all days of the week
+   * This is equivalent to calling <code>setWeekDays</code> with all days
    */
   public void setAllWeekDays() {
     this.setWeekDays(Set.of(DayOfWeek.values()));
@@ -125,11 +127,11 @@ public class DateTimeRange implements Serializable {
  * @return a list of {@link TimeInterval} objects sorted by their time range
  */
   public List<TimeInterval> getIntervals() {
-    return generateIntervals(this.startDate.atTime(this.startTime), this.endDate.atTime(this.endTime));
+    return generateIntervals(this.startDate.atTime(this.startTime), endDate);
   }
 
 /**
- * Checks if the given {@link LocalDate} falls within any interval.
+ * Checks if the given {@link LocalDate} falls within any interval
  *
  * @return {@code true} if the argument is within an interval, {@code false} otherwise
  */
@@ -182,36 +184,23 @@ public class DateTimeRange implements Serializable {
    */
   public TimeInterval getNextInterval(LocalDateTime from) {
     LocalDate date = from.toLocalDate();
-    LocalTime time = from.toLocalTime();
     TimeInterval interval = null;
 
-    if (!weekDays.contains(from.getDayOfWeek())) {
-      DayOfWeek nextWeekDay = getNextDay(date.getDayOfWeek());
-      date = date.plusDays(daysBetween(nextWeekDay, date.getDayOfWeek()));
-    }
+    long offset = getStartOffset(from);
+    date = date.plusDays(offset);
+
     if (insideRange(date)) {
-      if (this.endTime.isAfter(time)) {
-        interval = new TimeInterval(
-            LocalDateTime.of(date, this.startTime),
-            LocalDateTime.of(date, this.endTime)
-        );
-      } else {
-        DayOfWeek nextWeekDay = getNextDay(date.getDayOfWeek());
-        LocalDate nextDay = date.plusDays(daysBetween(nextWeekDay, date.getDayOfWeek()));
-        if (insideRange(nextDay)) {
-          interval = new TimeInterval(
-              LocalDateTime.of(nextDay, this.startTime),
-              LocalDateTime.of(nextDay, this.endTime)
-          );
-        }
-      }
+      interval = new TimeInterval(
+          LocalDateTime.of(date, this.startTime),
+          LocalDateTime.of(date, this.endTime)
+      );
     }
 
     return interval;
   }
 
   /**
-   * Gets the intervals that end after the current date and time.
+   * Gets the intervals that end after the current date and time
    *
    * @return a list of {@link TimeInterval} objects representing the remaining intervals
    */
@@ -220,23 +209,16 @@ public class DateTimeRange implements Serializable {
   }
 
   /**
-   * Gets the intervals that end after given {@link LocalDateTime}.
+   * Gets the intervals that end after given {@link LocalDateTime}
    *
    * @return a list of {@link TimeInterval} objects representing the remaining intervals
    */
   public List<TimeInterval> getIntervalsLeft(LocalDateTime from) {
-    List<TimeInterval> result = new ArrayList<>();
-    TimeInterval nextInterval = getNextInterval(from);
-
-    if (nextInterval != null) {
-      result.addAll(generateIntervals(nextInterval.getStartDate(), this.endDate.atTime(LocalTime.MAX)));
-    }
-
-    return result;
+    return generateIntervals(from, endDate);
   }
 
   /**
-   * Gets the intervals that end after given {@link LocalDate}.
+   * Gets the intervals that end after given {@link LocalDate}
    *
    * @return a list of {@link TimeInterval} objects representing the remaining intervals
    */
@@ -245,7 +227,7 @@ public class DateTimeRange implements Serializable {
   }
 
   /**
-   * Gets the intervals that ended before the current date and time.
+   * Gets the intervals that ended before the current date and time
    *
    * @return a list of {@link TimeInterval} objects representing the past intervals
    */
@@ -268,11 +250,10 @@ public class DateTimeRange implements Serializable {
    * @return a list of {@link TimeInterval} objects representing the past intervals
    */
   public List<TimeInterval> getPastIntervals(LocalDateTime from) {
-    TimeInterval nextInterval = getNextInterval(from);
+    LocalTime endTime = from.toLocalTime();
+    LocalDate endDate = from.toLocalDate();
 
-    from = nextInterval == null ? this.getEndDate().atTime(LocalTime.MAX) : nextInterval.getStartDate();
-
-    return new ArrayList<>(generateIntervals(this.startDate.atTime(LocalTime.MIN), from));
+    return generateIntervals(startDate.atTime(startTime), !endTime.isBefore(this.endTime) ? endDate.plusDays(1) : endDate);
   }
 
   /**
@@ -329,7 +310,8 @@ public class DateTimeRange implements Serializable {
     return current;
   }
 
-  private int daysBetween(DayOfWeek to, DayOfWeek from) {
+  // If <from> is after <to>, add a week (7) offset
+  private int daysBetween(DayOfWeek from, DayOfWeek to) {
     int offset = to.getValue() - from.getValue();
     if (offset <= 0) {
       offset = 7 + offset;
@@ -337,37 +319,49 @@ public class DateTimeRange implements Serializable {
     return offset;
   }
 
-  private List<TimeInterval> generateIntervals(LocalDateTime from, LocalDateTime to) {
-    LocalDate startDate = from.toLocalDate();
-    LocalTime startTime = from.toLocalTime();
-    LocalDate endDate = to.toLocalDate();
-    long days = java.time.temporal.ChronoUnit.DAYS.between(startDate, endDate);
-    long i = 0;
-    List<TimeInterval> entities = new ArrayList<>();
-    DayOfWeek firstDay = startDate.getDayOfWeek();
-    if (!weekDays.contains(firstDay) || !this.endTime.isAfter(startTime)) {
-      DayOfWeek nextDay = getNextDay(startDate.getDayOfWeek());
-      i = daysBetween(nextDay, firstDay);
-    }
+  // Check if date is between start and end (exclusive)
+  private boolean insideRange(LocalDate date) {
+    return !this.startDate.isAfter(date) && this.endDate.isAfter(date);
+  }
 
-    while (i < days) {
-      LocalDate current = startDate.plusDays(i);
+  // <to> is exclusive
+  private List<TimeInterval> generateIntervals(LocalDateTime from, LocalDate to) {
+    List<TimeInterval> entities = new ArrayList<>();
+    LocalDate startDate = from.toLocalDate();
+
+    long totalDays = getTotalDays(startDate, to);
+    long startOffset = getStartOffset(from);
+
+    while (startOffset < totalDays) {
+      LocalDate current = startDate.plusDays(startOffset);
       LocalDateTime start = LocalDateTime.of(current, this.startTime);
       LocalDateTime end = LocalDateTime.of(current, this.endTime);
       TimeInterval timeInterval = new TimeInterval(start, end);
       entities.add(timeInterval);
 
       DayOfWeek lastDay = current.getDayOfWeek();
-      DayOfWeek nextDay = getNextDay(current.getDayOfWeek());
-      i += daysBetween(nextDay, lastDay);
+      DayOfWeek nextDay = getNextDay(lastDay);
+      startOffset += daysBetween(lastDay, nextDay);
     }
 
     return entities;
   }
 
-  private boolean insideRange(LocalDate date) {
-    return (this.startDate.isEqual(date) || this.startDate.isBefore(date))
-        &&
-        (this.endDate.isAfter(date));
+  // Get days constrained within dates range
+  private long getTotalDays(LocalDate startDate, LocalDate endDate) {
+    LocalDate start = startDate.isBefore(this.startDate) ? this.startDate : startDate;
+    LocalDate end = endDate.isAfter(this.endDate) ? this.endDate : endDate;
+    return DAYS.between(start, end);
+  }
+
+  // From startDate, get days till next interval
+  private long getStartOffset(LocalDateTime startDate) {
+    DayOfWeek firstDay = startDate.getDayOfWeek();
+    // Check if it should start the next day
+    if (!weekDays.contains(firstDay) || !this.endTime.isAfter(startDate.toLocalTime())) {
+      DayOfWeek nextDay = getNextDay(startDate.getDayOfWeek());
+      return daysBetween(firstDay, nextDay);
+    }
+    else return 0;
   }
 }

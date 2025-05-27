@@ -32,7 +32,7 @@ import java.time.LocalTime;
 
 @PageTitle("Constrained")
 @SuppressWarnings("serial")
-@Route(value = "dtrp/constrained", layout = DateTimeRangePickerTabbedView.class)
+@Route(value = "datetimerange/constrained", layout = DateTimeRangePickerTabbedView.class)
 @DemoSource
 public class ConstrainedDemo extends VerticalLayout {
 
