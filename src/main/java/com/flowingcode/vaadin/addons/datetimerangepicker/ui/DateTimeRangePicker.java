@@ -20,6 +20,7 @@
 package com.flowingcode.vaadin.addons.datetimerangepicker.ui;
 
 import com.flowingcode.vaadin.addons.datetimerangepicker.api.DateTimeRange;
+import com.flowingcode.vaadin.addons.datetimerangepicker.api.TimeInterval;
 import com.flowingcode.vaadin.addons.datetimerangepicker.ui.ChipGroup.Chip;
 import com.flowingcode.vaadin.addons.dayofweekselector.DayOfWeekSelector;
 import com.vaadin.flow.component.Component;
@@ -54,9 +55,21 @@ import java.util.Locale;
 import java.util.Set;
 
 /**
- * A component to create <a href="https://en.wikipedia.org/wiki/ISO_8601#Time_intervals">time intervals</a> based on date and time constraints
+ * A component to generate {@link TimeInterval} instances by customizing a {@link DateTimeRange}.
+ *
+ * <h5>Features:</h5>
+ * <ul>
+ * <li>Date range: Select start and end dates with optional maximum span.</li>
+ * <li>Days: Choose specific days of the week or predefined groups.</li>
+ * <li>Time range: Define start and end times with customizable steps and locale.</li>
+ * </ul>
+ *
+ * <p>
+ * Provides validation, customization, and internationalization support for flexible scheduling.
+ * </p>
  *
  * @author Izaguirre, Ezequiel
+ * @see DateTimeRange
  */
 public class DateTimeRangePicker
     extends CustomField<DateTimeRange> implements HasValidator<DateTimeRange> {
@@ -67,11 +80,11 @@ public class DateTimeRangePicker
 
   // Mandatory attributes for validation
   private DateTimeRangePickerValidator validator;
-  private DatePicker startDate;
-  private DatePicker endDate;
-  private TimePicker startTime;
-  private TimePicker endTime;
-  private DayOfWeekSelector weekDays;
+  private DatePicker startDatePicker;
+  private DatePicker endDatePicker;
+  private TimePicker startTimePicker;
+  private TimePicker endTimePicker;
+  private DayOfWeekSelector weekDaySelector;
 
   // UI-only validation attributes (should change after validation check)
   private SpanLine daysDivider;
@@ -97,6 +110,30 @@ public class DateTimeRangePicker
   private Chip afterNoonChip;
   private Chip allTimeChip;
   private List<String> daysInitials;
+  private Integer maxDaysSpan = null;
+
+  public DateTimeRangePicker() {
+    this(defaultErrorMessage);
+  }
+
+  public DateTimeRangePicker(String errorMessage) {
+    super();
+    setUI();
+    setDefaultI18n();
+    setErrorMessage(errorMessage);
+  }
+
+  public DateTimeRangePicker(DateTimeRange defaultValue, String errorMessage) {
+    super(defaultValue);
+    setUI();
+    setDefaultI18n();
+    setErrorMessage(errorMessage);
+    setPresentationValue(defaultValue);
+  }
+
+  public DateTimeRangePicker(DateTimeRange defaultValue) {
+    this(defaultValue, defaultErrorMessage);
+  }
 
   private void setUI() {
     addClassNames(
@@ -143,17 +180,17 @@ public class DateTimeRangePicker
   }
 
   void refreshUI(boolean datesOk, boolean daysOk, boolean timesOk) {
-    daysDivider.setText(formatDaysSpan(startDate.getValue(), endDate.getValue()));
-    timeDivider.setText(formatTimeSpan(startTime.getValue(), endTime.getValue()));
+    daysDivider.setText(formatDaysSpan(startDatePicker.getValue(), endDatePicker.getValue()));
+    timeDivider.setText(formatTimeSpan(startTimePicker.getValue(), endTimePicker.getValue()));
 
-    startDate.setInvalid(startDate.getValue() != null && endDate.getValue() != null && !datesOk);
-    endDate.setInvalid(startDate.getValue() != null && endDate.getValue() != null && !datesOk);
+    startDatePicker.setInvalid(startDatePicker.getValue() != null && endDatePicker.getValue() != null && !datesOk);
+    endDatePicker.setInvalid(startDatePicker.getValue() != null && endDatePicker.getValue() != null && !datesOk);
     dateCircle.setColor(datesOk ? SUCCESS_COLOR : ERROR_COLOR);
 
     daysCircle.setColor(daysOk ? SUCCESS_COLOR : ERROR_COLOR);
 
-    startTime.setInvalid(startTime.getValue() != null && endTime.getValue() != null && !timesOk);
-    endTime.setInvalid(startTime.getValue() != null && endTime.getValue() != null && !timesOk);
+    startTimePicker.setInvalid(startTimePicker.getValue() != null && endTimePicker.getValue() != null && !timesOk);
+    endTimePicker.setInvalid(startTimePicker.getValue() != null && endTimePicker.getValue() != null && !timesOk);
     timeCircle.setColor(timesOk ? SUCCESS_COLOR : ERROR_COLOR);
   }
 
@@ -170,25 +207,37 @@ public class DateTimeRangePicker
         Bottom.SMALL
     );
 
-    datesTitle = new H5("Select dates range");
+    datesTitle = new H5();
 
     dateCircle = new Circle();
 
     headerWrapper.add(dateCircle, datesTitle);
 
-    startDate = new DatePicker();
-    startDate.setPlaceholder("Start date");
-    startDate.setClearButtonVisible(true);
+    startDatePicker = new DatePicker();
+    startDatePicker.setClearButtonVisible(true);
+    startDatePicker.addValueChangeListener(it -> {
+      if (maxDaysSpan != null && maxDaysSpan > 0) {
+        LocalDate current = it.getValue();
+        LocalDate maxDate = current != null ? current.plusDays(maxDaysSpan) : null;
+        endDatePicker.setMax(maxDate);
+      }
+    });
 
-    endDate = new DatePicker();
-    endDate.setPlaceholder("End date");
-    endDate.setClearButtonVisible(true);
+    endDatePicker = new DatePicker();
+    endDatePicker.setClearButtonVisible(true);
+    endDatePicker.addValueChangeListener(it -> {
+      if (maxDaysSpan != null && maxDaysSpan > 0) {
+        LocalDate current = it.getValue();
+        LocalDate minDate = current != null ? current.minusDays(maxDaysSpan) : null;
+        startDatePicker.setMin(minDate);
+      }
+    });
 
     daysDivider = new SpanLine();
 
     HorizontalLayout selectorLayout = new HorizontalLayout();
     selectorLayout.addClassNames(Gap.SMALL);
-    selectorLayout.add(startDate, daysDivider, endDate);
+    selectorLayout.add(startDatePicker, daysDivider, endDatePicker);
 
     layout.add(headerWrapper, selectorLayout);
 
@@ -199,7 +248,7 @@ public class DateTimeRangePicker
     VerticalLayout layout = new VerticalLayout();
     layout.addClassNames(AlignItems.STRETCH, Bottom.NONE, Padding.NONE, Gap.XSMALL);
 
-    daysTitle = new H5("Select days");
+    daysTitle = new H5();
 
     HorizontalLayout headerLayout = new HorizontalLayout();
     headerLayout.addClassNames(
@@ -208,9 +257,9 @@ public class DateTimeRangePicker
         JustifyContent.BETWEEN
     );
 
-    weekendChip = new Chip("Weekend");
-    weekdaysChip = new Chip("Weekdays");
-    allDaysChip = new Chip("All");
+    weekendChip = new Chip();
+    weekdaysChip = new Chip();
+    allDaysChip = new Chip();
 
     daysChipGroup = new ChipGroup(
         weekendChip,
@@ -222,31 +271,29 @@ public class DateTimeRangePicker
 
     headerLayout.add(daysCircle, daysTitle, daysChipGroup);
 
-    weekDays = new DayOfWeekSelector();
-    weekDays.getChildren().forEach(e ->
+    weekDaySelector = new DayOfWeekSelector();
+    weekDaySelector.getChildren().forEach(e ->
         e.getStyle().setScale("1.15")
     );
-    weekDays.addValueChangeListener(ev -> updateValue());
-    weekDays.setFirstDayOfWeek(DayOfWeek.SUNDAY);
-    weekDays.addClassNames(
+    weekDaySelector.addValueChangeListener(ev -> updateValue());
+    weekDaySelector.setFirstDayOfWeek(DayOfWeek.SUNDAY);
+    weekDaySelector.addClassNames(
         AlignSelf.CENTER,
         Padding.NONE,
         Margin.NONE
     );
-    daysInitials = List.of("S","M","T","W","T","F","S");
-    weekDays.setWeekDaysShort(daysInitials);
 
     weekendChip.onPress(checked -> {
       if (checked) {
-        weekDays.setValue(DayOfWeek.SUNDAY, DayOfWeek.SATURDAY);
+        weekDaySelector.setValue(DayOfWeek.SUNDAY, DayOfWeek.SATURDAY);
         updateValue();
       }
-      weekDays.setReadOnly(checked);
+      weekDaySelector.setReadOnly(checked);
     });
 
     weekdaysChip.onPress(checked -> {
       if (checked) {
-        weekDays.setValue(
+        weekDaySelector.setValue(
             DayOfWeek.MONDAY,
             DayOfWeek.TUESDAY,
             DayOfWeek.WEDNESDAY,
@@ -255,12 +302,12 @@ public class DateTimeRangePicker
         );
         updateValue();
       }
-      weekDays.setReadOnly(checked);
+      weekDaySelector.setReadOnly(checked);
     });
 
     allDaysChip.onPress(checked -> {
       if (checked) {
-        weekDays.setValue(
+        weekDaySelector.setValue(
             DayOfWeek.MONDAY,
             DayOfWeek.TUESDAY,
             DayOfWeek.WEDNESDAY,
@@ -271,10 +318,10 @@ public class DateTimeRangePicker
         );
         updateValue();
       }
-      weekDays.setReadOnly(checked);
+      weekDaySelector.setReadOnly(checked);
     });
 
-    layout.add(headerLayout, weekDays);
+    layout.add(headerLayout, weekDaySelector);
 
     return layout;
   }
@@ -283,29 +330,27 @@ public class DateTimeRangePicker
     VerticalLayout layout = new VerticalLayout();
     layout.addClassNames(AlignItems.STRETCH, Padding.NONE, Gap.XSMALL);
 
-    timesTitle = new H5("Select times range");
+    timesTitle = new H5();
 
-    morningChip = new Chip("Morning");
-    afterNoonChip = new Chip("Afternoon");
-    allTimeChip = new Chip("All");
+    morningChip = new Chip();
+    afterNoonChip = new Chip();
+    allTimeChip = new Chip();
     timeChipGroup = new ChipGroup(
         morningChip,
         afterNoonChip,
         allTimeChip
     );
 
-    startTime = new TimePicker();
-    startTime.setPlaceholder("Start time");
-    startTime.setStep(Duration.ofMinutes(30));
+    startTimePicker = new TimePicker();
+    startTimePicker.setStep(Duration.ofMinutes(30));
     // Sets the TimePicker to use 24-hours format
-    startTime.setLocale(Locale.FRENCH);
-    startTime.setClearButtonVisible(true);
+    startTimePicker.setLocale(Locale.FRENCH);
+    startTimePicker.setClearButtonVisible(true);
 
-    endTime = new TimePicker();
-    endTime.setPlaceholder("End time");
-    endTime.setStep(Duration.ofMinutes(30));
-    endTime.setLocale(Locale.FRENCH);
-    endTime.setClearButtonVisible(true);
+    endTimePicker = new TimePicker();
+    endTimePicker.setStep(Duration.ofMinutes(30));
+    endTimePicker.setLocale(Locale.FRENCH);
+    endTimePicker.setClearButtonVisible(true);
 
     morningChip.onPress(checked ->
         applyTime(LocalTime.MIN, LocalTime.NOON, checked)
@@ -330,29 +375,15 @@ public class DateTimeRangePicker
 
     HorizontalLayout selectorLayout = new HorizontalLayout();
     selectorLayout.addClassNames(Gap.SMALL);
-    selectorLayout.add(startTime, timeDivider, endTime);
+    selectorLayout.add(startTimePicker, timeDivider, endTimePicker);
 
     layout.add(headerLayout, selectorLayout);
 
     return layout;
   }
 
-  private void applyTime(LocalTime start, LocalTime end, boolean checked) {
-    if(checked) {
-      LocalTime min = startTime.getMin();
-      LocalTime max = endTime.getMax();
-      LocalTime minTime = min != null && min.isAfter(start) ? min : start;
-      LocalTime maxTime = max != null && max.isBefore(end) ? max : end;
-      startTime.setValue(minTime);
-      endTime.setValue(maxTime);
-      updateValue();
-    }
-    startTime.setReadOnly(checked);
-    endTime.setReadOnly(checked);
-  }
-
   /**
-   * Retrieves the current value of the DateTimeRangePicker component
+   * Retrieves the current value of the DateTimeRangePicker component.
    *
    * @return the current {@link DateTimeRange} value, or null if the fields are invalid or incomplete
    */
@@ -368,11 +399,11 @@ public class DateTimeRangePicker
 
     if(isValid) {
       return new DateTimeRange(
-          startDate.getValue(),
-          endDate.getValue(),
-          startTime.getValue(),
-          endTime.getValue(),
-          weekDays.getValue()
+          startDatePicker.getValue(),
+          endDatePicker.getValue(),
+          startTimePicker.getValue(),
+          endTimePicker.getValue(),
+          weekDaySelector.getValue()
       );
     }
     else return null;
@@ -381,20 +412,20 @@ public class DateTimeRangePicker
   @Override
   protected void setPresentationValue(DateTimeRange dateTimeRange) {
     if (dateTimeRange == null) {
-      startDate.clear();
-      endDate.clear();
-      startTime.clear();
-      endTime.clear();
-      weekDays.clear();
-      daysDivider.setEmptyText();
-      timeDivider.setEmptyText();
+      startDatePicker.clear();
+      endDatePicker.clear();
+      startTimePicker.clear();
+      endTimePicker.clear();
+      weekDaySelector.clear();
+      daysDivider.clearText();
+      timeDivider.clearText();
     }
     else {
-      startDate.setValue(dateTimeRange.getStartDate());
-      endDate.setValue(dateTimeRange.getEndDate());
-      startTime.setValue(dateTimeRange.getStartTime());
-      endTime.setValue(dateTimeRange.getEndTime());
-      weekDays.setValue(dateTimeRange.getWeekDays());
+      startDatePicker.setValue(dateTimeRange.getStartDate());
+      endDatePicker.setValue(dateTimeRange.getEndDate());
+      startTimePicker.setValue(dateTimeRange.getStartTime());
+      endTimePicker.setValue(dateTimeRange.getEndTime());
+      weekDaySelector.setValue(dateTimeRange.getWeekDays());
 
       daysDivider.setText(formatDaysSpan(dateTimeRange.getStartDate(), dateTimeRange.getEndDate()));
       timeDivider.setText(formatTimeSpan(dateTimeRange.getStartTime(), dateTimeRange.getEndTime()));
@@ -407,7 +438,7 @@ public class DateTimeRangePicker
   }
 
   /**
-   * Changes this component's visibility state
+   * Changes this component's visibility state.
    *
    * @param visible whether this component should be visible
    */
@@ -420,7 +451,7 @@ public class DateTimeRangePicker
   }
 
   /**
-   * Changes this component's read-only state
+   * Changes this component's read-only state.
    *
    * @param readOnly whether this component should be read-only
    */
@@ -435,105 +466,89 @@ public class DateTimeRangePicker
   }
 
   /**
-   * Sets the maximum days distance between start and end dates
+   * Sets the maximum days distance between start and end dates.
    *
    * @param max the maximum distance measured in days
    */
   public void setMaxDaysSpan(int max) {
-
-    startDate.addValueChangeListener(it -> {
-      LocalDate current = it.getValue();
-      LocalDate maxDate = current != null ? current.plusDays(max) : null;
-      if (max > 0) {
-        endDate.setMax(maxDate);
-      }
-    });
-
-    endDate.addValueChangeListener(it -> {
-          LocalDate current = it.getValue();
-          LocalDate minDate = current != null ? current.minusDays(max) : null;
-          if (max > 0) {
-            startDate.setMin(minDate);
-          }
-        }
-    );
+    maxDaysSpan = max;
   }
 
   /**
-   * Sets the minimum start date
+   * Sets the minimum start date.
    *
    * @param date the minimum date that can be selected
    */
   public void setMinDate(LocalDate date) {
-    startDate.setMin(date);
-    endDate.setMin(date);
+    startDatePicker.setMin(date);
+    endDatePicker.setMin(date);
   }
 
   /**
-   * Sets the maximum end date
+   * Sets the maximum end date.
    *
    * @param date the maximum date that can be selected
    */
   public void setMaxDate(LocalDate date) {
-    endDate.setMax(date);
-    startDate.setMax(date);
+    endDatePicker.setMax(date);
+    startDatePicker.setMax(date);
   }
 
   /**
-   * Sets the minimum start time
+   * Sets the minimum start time.
    *
    * @param time the minimum time that can be selected
    */
   public void setMinTime(LocalTime time) {
-    startTime.setMin(time);
-    endTime.setMin(time);
+    startTimePicker.setMin(time);
+    endTimePicker.setMin(time);
     // If afternoon chip is not visible, keep only the 'all time' chip
     morningChip.setVisible((time == null || time.isBefore(LocalTime.NOON)) && afterNoonChip.isVisible());
   }
 
   /**
-   * Sets the maximum end time
+   * Sets the maximum end time.
    *
    * @param time the maximum time that can be selected
    */
   public void setMaxTime(LocalTime time) {
-    startTime.setMax(time);
-    endTime.setMax(time);
+    startTimePicker.setMax(time);
+    endTimePicker.setMax(time);
     // If morning chip is not visible, keep only the 'all time' chip
     afterNoonChip.setVisible((time == null || time.isAfter(LocalTime.NOON)) && morningChip.isVisible());
   }
 
   /**
-   * Sets the selected week days
+   * Sets the selected week days.
    *
-   * @param weekDays the days that will be selected
+   * @param weekDaySelector the days that will be selected
    * <br>note that days not included will be deselected
    */
-  public void setWeekDays(DayOfWeek... weekDays) {
-    this.weekDays.setValue(Set.of(weekDays));
+  public void setWeekDays(DayOfWeek... weekDaySelector) {
+    this.weekDaySelector.setValue(Set.of(weekDaySelector));
   }
 
   /**
-   * Sets which day should be placed at the starting or left-most position
+   * Sets which day should be placed at the starting or left-most position.
    *
    * @param weekDay the starting or left-most day
    */
   public void setFirstWeekDay(DayOfWeek weekDay) {
-    weekDays.setFirstDayOfWeek(weekDay);
+    weekDaySelector.setFirstDayOfWeek(weekDay);
   }
 
   /**
-   * Changes the date pickers' read-only state
+   * Changes the date pickers' read-only state.
    *
    * @param readOnly whether the date pickers should be read-only
    */
   public void setDatesReadOnly(boolean readOnly) {
-    startDate.setReadOnly(readOnly);
-    endDate.setReadOnly(readOnly);
+    startDatePicker.setReadOnly(readOnly);
+    endDatePicker.setReadOnly(readOnly);
   }
 
   /**
-   * Changes the date pickers' visibility state
+   * Changes the date pickers' visibility state.
    *
    * @param visible whether the date pickers should be visible
    */
@@ -542,17 +557,17 @@ public class DateTimeRangePicker
   }
 
   /**
-   * Changes the days picker's read-only state
+   * Changes the days picker's read-only state.
    *
    * @param readOnly whether the days picker should be read-only
    */
   public void setDaysReadOnly(boolean readOnly) {
-    weekDays.setReadOnly(readOnly);
+    weekDaySelector.setReadOnly(readOnly);
     daysChipGroup.setReadOnly(readOnly);
   }
 
   /**
-   * Changes the days picker's visibility state
+   * Changes the days picker's visibility state.
    *
    * @param visible whether the days picker should be visible
    */
@@ -561,18 +576,18 @@ public class DateTimeRangePicker
   }
 
   /**
-   * Changes the time pickers' read-only state
+   * Changes the time pickers' read-only state.
    *
    * @param readOnly whether the time pickers should be read-only
    */
   public void setTimesReadOnly(boolean readOnly) {
-    startTime.setReadOnly(readOnly);
-    endTime.setReadOnly(readOnly);
+    startTimePicker.setReadOnly(readOnly);
+    endTimePicker.setReadOnly(readOnly);
     timeChipGroup.setReadOnly(readOnly);
   }
 
   /**
-   * Changes the time pickers' visibility state
+   * Changes the time pickers' visibility state.
    *
    * @param visible whether the time pickers should be visible
    */
@@ -581,7 +596,7 @@ public class DateTimeRangePicker
   }
 
   /**
-   * Changes the left line indicator's visibility state
+   * Changes the left line indicator's visibility state.
    *
    * @param visible whether the left indicator should be visible
    */
@@ -593,27 +608,27 @@ public class DateTimeRangePicker
   }
 
   /**
-   * Sets the minimum time gap for the time selection lists
+   * Sets the minimum time gap for the time selection lists.
    *
    * @param step the time difference between adjacent lists' items
    */
   public void setTimeStep(Duration step) {
-    startTime.setStep(step);
-    endTime.setStep(step);
+    startTimePicker.setStep(step);
+    endTimePicker.setStep(step);
   }
 
   /**
-   * Sets the time locale for the time selection lists
+   * Sets the time locale for the time selection lists.
    *
    * @param locale the {@code Locale} to use for the time lists' items
    */
   public void setTimeLocale(Locale locale) {
-    startTime.setLocale(locale);
-    endTime.setLocale(locale);
+    startTimePicker.setLocale(locale);
+    endTimePicker.setLocale(locale);
   }
 
   /**
-   * Sets the custom text properties for internationalization purposes
+   * Sets the custom text properties for internationalization purposes.
    *
    * @param i18n instance to attach
    * @see DateTimeRangePickerI18n
@@ -628,25 +643,32 @@ public class DateTimeRangePicker
     }
   }
 
-  public DateTimeRangePicker() {
-    this(defaultErrorMessage);
+  private void setDefaultI18n() {
+    DateTimeRangePickerI18n defaultI18n = new DateTimeRangePickerI18n()
+        .setDatesTitle("Select dates range")
+        .setDatesPlaceholder("Start date", "End date")
+        .setDaysTitle("Select days")
+        .setDayInitials(List.of("S","M","T","W","T","F","S"))
+        .setDaysChipsText("Weekend", "Weekdays", "All")
+        .setTimesTitle("Select times range")
+        .setTimeChipsText("Morning", "Afternoon", "All")
+        .setTimesPlaceholder("Start time", "End time");
+    setI18n(defaultI18n);
   }
 
-  public DateTimeRangePicker(String errorMessage) {
-    super();
-    setUI();
-    setErrorMessage(errorMessage);
-  }
-
-  public DateTimeRangePicker(DateTimeRange defaultValue, String errorMessage) {
-    super(defaultValue);
-    setUI();
-    setErrorMessage(errorMessage);
-    setPresentationValue(defaultValue);
-  }
-
-  public DateTimeRangePicker(DateTimeRange defaultValue) {
-    this(defaultValue, defaultErrorMessage);
+  // Fit start and end times within current time range constraints
+  private void applyTime(LocalTime start, LocalTime end, boolean checked) {
+    if(checked) {
+      LocalTime min = startTimePicker.getMin();
+      LocalTime max = endTimePicker.getMax();
+      LocalTime minTime = min != null && min.isAfter(start) ? min : start;
+      LocalTime maxTime = max != null && max.isBefore(end) ? max : end;
+      startTimePicker.setValue(minTime);
+      endTimePicker.setValue(maxTime);
+      updateValue();
+    }
+    startTimePicker.setReadOnly(checked);
+    endTimePicker.setReadOnly(checked);
   }
 
   private static String formatTimeSpan(LocalTime startTime, LocalTime endTime) {
@@ -673,24 +695,24 @@ public class DateTimeRangePicker
 
   // Getters & Setters
 
-  DatePicker getStartDate() {
-    return startDate;
+  DatePicker getStartDatePicker() {
+    return startDatePicker;
   }
 
-  DatePicker getEndDate() {
-    return endDate;
+  DatePicker getEndDatePicker() {
+    return endDatePicker;
   }
 
-  TimePicker getStartTime() {
-    return startTime;
+  TimePicker getStartTimePicker() {
+    return startTimePicker;
   }
 
-  TimePicker getEndTime() {
-    return endTime;
+  TimePicker getEndTimePicker() {
+    return endTimePicker;
   }
 
-  DayOfWeekSelector getWeekDays() {
-    return weekDays;
+  DayOfWeekSelector getWeekDaySelector() {
+    return weekDaySelector;
   }
 
   H5 getDatesTitle() {

@@ -38,11 +38,11 @@ public class DateTimeRangePickerValidator implements Validator<DateTimeRange> {
   }
 
   private void setManualValidation() {
-    model.getStartTime().setManualValidation(true);
-    model.getEndTime().setManualValidation(true);
-    model.getStartDate().setManualValidation(true);
-    model.getEndDate().setManualValidation(true);
-    model.getWeekDays().setManualValidation(true);
+    model.getStartTimePicker().setManualValidation(true);
+    model.getEndTimePicker().setManualValidation(true);
+    model.getStartDatePicker().setManualValidation(true);
+    model.getEndDatePicker().setManualValidation(true);
+    model.getWeekDaySelector().setManualValidation(true);
   }
 
   // Since a DateTimeRange instance is always valid, checking for its presence is enough
@@ -56,9 +56,9 @@ public class DateTimeRangePickerValidator implements Validator<DateTimeRange> {
 
   // Checks if UI is valid
   public boolean isValid() {
-    boolean datesOk = dateValidation(model.getStartDate().getValue(), model.getEndDate().getValue());
-    boolean daysOk = daysValidation(model.getWeekDays().getValue());
-    boolean timesOk = timeValidation(model.getStartTime().getValue(), model.getEndTime().getValue());
+    boolean datesOk = dateValidation(model.getStartDatePicker().getValue(), model.getEndDatePicker().getValue());
+    boolean daysOk = daysValidation(model.getWeekDaySelector().getValue());
+    boolean timesOk = timeValidation(model.getStartTimePicker().getValue(), model.getEndTimePicker().getValue());
     model.refreshUI(datesOk, daysOk, timesOk);
     return datesOk && daysOk && timesOk;
   }

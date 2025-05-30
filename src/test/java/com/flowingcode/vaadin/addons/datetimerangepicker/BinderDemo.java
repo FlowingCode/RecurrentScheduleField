@@ -42,7 +42,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 @PageTitle("Binding")
-@SuppressWarnings("serial")
 @Route(value = "datetimerange/binder", layout = DateTimeRangePickerTabbedView.class)
 @DemoSource
 public class BinderDemo extends VerticalLayout {

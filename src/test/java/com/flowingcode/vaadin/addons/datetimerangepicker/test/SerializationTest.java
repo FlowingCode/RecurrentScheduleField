@@ -42,7 +42,7 @@ public class SerializationTest {
   }
 
   @Test
-  public void testSerialization() throws ClassNotFoundException, IOException {
+  public void testSerialization() {
     try {
       testSerializationOf(new DateTimeRangePicker());
     } catch (Exception e) {

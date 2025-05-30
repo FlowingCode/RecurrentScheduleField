@@ -6,19 +6,19 @@
 
 # Date Time Range Picker Add-on
 
-A Vaadin 24 component for creating and managing [time intervals](https://en.wikipedia.org/wiki/ISO_8601#Time_intervals) (_a time period defined by start and end points_) within a defined date and time range.
+A Vaadin 24 component for creating and managing [time intervals](https://en.wikipedia.org/wiki/ISO_8601#Time_intervals) (_a time period defined by start and end points_) within defined date, time and days constraints.
 
-Includes a UI to define time and date ranges along with an API to query the intervals.
+Includes a UI to customize dates, times and days along with an API to query the intervals.
 
 As an example, you could define an interval to happen **every weekend** from **8:30 to 12:30 AM** between the
-**1st and 15th of May 2025**.<br>Then, use the returned object to make the following queries:
+**1st** and **15th of May 2025**.<br>Then, use the returned object to make the following queries:
 
 1. How many intervals will be created? (4)
 2. Starting from today, when will the next interval occur?
 3. Is the 7th of May at 9:15 AM included in any interval? (It's not)
-   - How about the 5th of May at 9:00 AM? (Yes)
-4. How many intervals will have passed after the 9th of May? (2)
-5. How many intervals will remain after the 5th of May at 12:45? (3)
+   - How about the 4th of May at 9:00 AM? (Yes)
+4. How many intervals will have passed after the 4th at 7:30 of May? (1)
+5. How many intervals will remain after the 11th of May at 12:45? (0)
 
 ... and more
 
@@ -89,43 +89,43 @@ Date Time Range Picker Add-on is written by Flowing Code S.A.
 
 ## Getting started
 
-```
+``` java
     DateTimeRangePicker addon = new DateTimeRangePicker();    (1)
     addon.setMinDate(LocalDate.now());                        (2)
     addon.setMaxDate(LocalDate.now().plusDays(15));           (2)
     addon.setWeekDays(DayOfWeek.MONDAY, DayOfWeek.FRIDAY);    (3)
 ```
 - (1) Instantiation. 
-- (2) Date range selection will be constraint between **today** and **fifteen** days later.
+- (2) Only dates between **today** and **fifteen** days later can be selected. Keep in mind that both date and time ends are exclusive.
 - (3) Component will have **Monday** and **Friday** selected by default.
 
 ## Binding
 
-The API is exposed through the **DateTimeRange** class.
+The component leverages a ``DateTimeRange`` class to represent the selected date and time range.
 
-```
+``` java
     DateTimeRangePicker addon = new DateTimeRangePicker();                        
     Binder<Pojo> binder = new Binder<>(Pojo.class);                                 (1)
     binder.forField(addon).bind(Pojo::getDateTimeRange, Pojo::setDateTimeRange);    (2) 
     binder.setBean(pojo);                                                           (3)
 ```
- - (1) The **Pojo** class is bound using its getter and setter methods (2).
- - (2) The **DateTimeRangePicker** is bound. Its [value](https://vaadin.com/api/platform/current/com/vaadin/flow/component/HasValue.html) can be operated now.
- - (3) The **DateTimeRange** instance is saved in the **Pojo** class or returned from it.
+ - (1) The ``Pojo`` class is bound using its getter and setter methods (2).
+ - (2) The ``DateTimeRangePicker`` is bound.
+ - (3) The ``DateTimeRange`` instance is updated from/on the ``Pojo`` class.
 
 
-You can operate time intervals with the **DateTimeRange** class, which acts as a holder.
+Then, use the ``DateTimeRange`` class API to query time intervals.
 
-```
+``` java
     TimeInterval interval = pojo.getDateTimeRange().getNextInterval();          (1)
     boolean includes = pojo.getDateTimeRange().includes(LocalDateTime.now());   (2)
 ```
  - (1) "Starting from today, when will the next interval occur?"
- - (2) "Is today included in any interval?"
+ - (2) "Is today within any interval?"
 
-You can also call a single **TimeInterval** instance directly.
+You can also call a single ``TimeInterval`` instance directly.
 
-```
+``` java
     boolean includes = interval != null && interval.includes(LocalDateTime.now());
 ```
 
@@ -133,7 +133,7 @@ You can also call a single **TimeInterval** instance directly.
 
 Customize a ``DateTimeRangePickerI18n`` instance and pass it to the component (1).
 
-```
+``` java
     DateTimeRangePicker addon = new DateTimeRangePicker();
     addon.setI18n(new DateTimeRangePickerI18n()                 (1)
         .setDatesTitle("Your custom title")

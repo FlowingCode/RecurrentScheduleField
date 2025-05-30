@@ -25,7 +25,6 @@ import com.flowingcode.vaadin.addons.demo.TabbedDemo;
 import com.vaadin.flow.router.ParentLayout;
 import com.vaadin.flow.router.Route;
 
-@SuppressWarnings("serial")
 @ParentLayout(DemoLayout.class)
 @Route("datetimerange")
 @GithubLink("https://github.com/FlowingCode/DateTimeRangePicker")

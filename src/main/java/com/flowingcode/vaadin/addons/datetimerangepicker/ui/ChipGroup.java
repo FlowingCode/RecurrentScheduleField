@@ -48,9 +48,9 @@ import java.util.Set;
 /**
  * A UI component representing a group of single-selection chips.
  * The group can be set to read-only mode, disabling user interaction.
- * This component is styled using the "fc-dtrp" CSS classes.
+ * This component is styled using the "fc-dtrp" and Lumo classes.
  */
-@CssImport("./styles/styles.css")
+@CssImport("./styles/fc-date-time-range-picker.css")
 class ChipGroup extends HorizontalLayout {
 
   private final Set<Chip> chips = new HashSet<>();
@@ -75,12 +75,11 @@ class ChipGroup extends HorizontalLayout {
     }
   }
 
-  public Chip addChip(Chip chip) {
+  public void addChip(Chip chip) {
     chips.add(chip);
     chip.setParent(this);
     chip.setReadOnly(readOnly);
     add(chip);
-    return chip;
   }
 
   private void onChipChange(Chip chip) {
@@ -110,7 +109,7 @@ class ChipGroup extends HorizontalLayout {
     private ChipGroup parent;
     private SerializableConsumer<Boolean> callback;
 
-    public Chip(String text) {
+    public Chip() {
       addClassNames(
           Horizontal.MEDIUM,
           Vertical.XSMALL,
@@ -125,7 +124,7 @@ class ChipGroup extends HorizontalLayout {
       checkIcon = VaadinIcon.CHECK.create();
       checkIcon.setSize("14px");
 
-      textField = new Span(text);
+      textField = new Span();
       textField.addClassNames(
           FontSize.SMALL,
           FontWeight.SEMIBOLD,

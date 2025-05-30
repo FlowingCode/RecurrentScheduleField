@@ -36,7 +36,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 @PageTitle("States")
-@SuppressWarnings("serial")
 @Route(value = "datetimerange/states", layout = DateTimeRangePickerTabbedView.class)
 @DemoSource
 public class StatesDemo extends VerticalLayout {
@@ -113,5 +112,6 @@ public class StatesDemo extends VerticalLayout {
     add(addon, buttonLayout);
   }
 
-  private enum PickerSection {DATES, DAYS, TIMES};
+  // Represents the different sections of the DateTimeRangePicker that can be toggled
+  private enum PickerSection {DATES, DAYS, TIMES}
 }

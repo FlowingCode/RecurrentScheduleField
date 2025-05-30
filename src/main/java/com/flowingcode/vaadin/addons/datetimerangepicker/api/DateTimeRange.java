@@ -33,8 +33,25 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
+
 /**
- * A class to operate {@link TimeInterval} instances based on defined date and time constraints
+ * Represents a range of dates, times and days, generating {@link TimeInterval} instances
+ * based on specified constraints.
+ *
+ * <h5>Characteristics:</h5>
+ * <ul>
+ * <li>Date range: Intervals span from (inclusive) start to (exclusive) end dates.</li>
+ * <li>Days: Only includes specified days of the week.</li>
+ * <li>Time range: Each interval spans from (inclusive) start to (exclusive) end times.</li>
+ * </ul>
+ *
+ * <h5>Features:</h5>
+ * <ul>
+ * <li>Retrieve intervals within the range.</li>
+ * <li>Check if a date or date-time falls within any interval.</li>
+ * <li>Get past or future intervals relative to a given date.</li>
+ * <li>Calculate interval duration or the period between start and end dates.</li>
+ * </ul>
  *
  * @author Izaguirre, Ezequiel
  * @see TimeInterval
@@ -76,7 +93,7 @@ public class DateTimeRange implements Serializable {
   }
 
   /**
-   * Sets time boundaries for the intervals
+   * Sets time boundaries for the intervals.
    *
    * @param startTime the starting point
    * @param endTime   the ending point (exclusive)
@@ -90,7 +107,7 @@ public class DateTimeRange implements Serializable {
   }
 
   /**
-   * Defines on which days of the week intervals are defined
+   * Defines on which days of the week intervals are defined.
    *
    * @param weekDays a list of days
    */
@@ -103,15 +120,15 @@ public class DateTimeRange implements Serializable {
   }
 
   /**
-   * Sets the week days to include all days of the week
-   * This is equivalent to calling <code>setWeekDays</code> with all days
+   * Sets the interval creation to include all days of the week.
+   * This is equivalent to calling {@link #setWeekDays(Set)} with all days.
    */
   public void setAllWeekDays() {
     this.setWeekDays(Set.of(DayOfWeek.values()));
   }
 
   /**
-   * Returns the days of the week on which intervals are defined
+   * Returns the days of the week on which intervals are defined.
    *
    * @return an immutable set of {@link DayOfWeek}
    */
@@ -120,18 +137,18 @@ public class DateTimeRange implements Serializable {
   }
 
 /**
- * Gets the intervals that conform to the current date, time, and weekday constraints.
+ * Gets the intervals that conform to the current date and time constraints.
  * Each interval represents a time range within the defined start and end dates,
- * and only includes the specified days of the week
+ * and only includes the specified days of the week.
  *
- * @return a list of {@link TimeInterval} objects sorted by their time range
+ * @return a list of {@link TimeInterval} objects, sorted by their time range
  */
   public List<TimeInterval> getIntervals() {
     return generateIntervals(this.startDate.atTime(this.startTime), endDate);
   }
 
 /**
- * Checks if the given {@link LocalDate} falls within any interval
+ * Checks if the given {@link LocalDate} falls within any interval.
  *
  * @return {@code true} if the argument is within an interval, {@code false} otherwise
  */
@@ -140,7 +157,7 @@ public class DateTimeRange implements Serializable {
   }
 
   /**
-   * Checks if the given {@link LocalDateTime} falls within any interval
+   * Checks if the given {@link LocalDateTime} falls within any interval.
    *
    * @return {@code true} if the argument is within an interval, {@code false} otherwise
    */
@@ -159,7 +176,7 @@ public class DateTimeRange implements Serializable {
   }
 
   /**
-   * Gets the next interval that ends after the given {@link LocalDate}
+   * Gets the next interval that ends after the given {@link LocalDate}.
    *
    * @return the next {@link TimeInterval} after the given date, or {@code null} if no such interval exists
    */
@@ -169,7 +186,7 @@ public class DateTimeRange implements Serializable {
   }
 
   /**
-   * Gets the next interval that ends after the current date and time
+   * Gets the next interval that ends after the current date and time.
    *
    * @return the next {@link TimeInterval} after the current date and time, or {@code null} if no such interval exists
    */
@@ -178,7 +195,7 @@ public class DateTimeRange implements Serializable {
   }
 
   /**
-   * Gets the next interval that ends after the given {@link LocalDateTime}
+   * Gets the next interval that ends after the given {@link LocalDateTime}.
    *
    * @return the next {@link TimeInterval} after the given date, or {@code null} if no such interval exists
    */
@@ -200,7 +217,7 @@ public class DateTimeRange implements Serializable {
   }
 
   /**
-   * Gets the intervals that end after the current date and time
+   * Gets the intervals that end after the current date and time.
    *
    * @return a list of {@link TimeInterval} objects representing the remaining intervals
    */
@@ -209,7 +226,7 @@ public class DateTimeRange implements Serializable {
   }
 
   /**
-   * Gets the intervals that end after given {@link LocalDateTime}
+   * Gets the intervals that end after given {@link LocalDateTime}.
    *
    * @return a list of {@link TimeInterval} objects representing the remaining intervals
    */
@@ -218,7 +235,7 @@ public class DateTimeRange implements Serializable {
   }
 
   /**
-   * Gets the intervals that end after given {@link LocalDate}
+   * Gets the intervals that end after given {@link LocalDate}.
    *
    * @return a list of {@link TimeInterval} objects representing the remaining intervals
    */
@@ -227,7 +244,7 @@ public class DateTimeRange implements Serializable {
   }
 
   /**
-   * Gets the intervals that ended before the current date and time
+   * Gets the intervals that ended before the current date and time.
    *
    * @return a list of {@link TimeInterval} objects representing the past intervals
    */
@@ -236,7 +253,7 @@ public class DateTimeRange implements Serializable {
   }
 
   /**
-   * Gets the intervals that ended before given {@link LocalDate}
+   * Gets the intervals that ended before given {@link LocalDate}.
    *
    * @return a list of {@link TimeInterval} objects representing the past intervals
    */
@@ -245,7 +262,7 @@ public class DateTimeRange implements Serializable {
   }
 
   /**
-   * Gets the intervals that ended before given {@link LocalDateTime}
+   * Gets the intervals that ended before given {@link LocalDateTime}.
    *
    * @return a list of {@link TimeInterval} objects representing the past intervals
    */
@@ -258,7 +275,7 @@ public class DateTimeRange implements Serializable {
 
   /**
    * Gets the time duration (or time period) of an interval.
-   * The duration is calculated as the difference between the start and (exclusive) end times
+   * The duration is calculated as the difference between the start and (exclusive) end times.
    *
    * @return a {@link Duration} representing the length of an interval
    */
@@ -267,35 +284,35 @@ public class DateTimeRange implements Serializable {
   }
 
   /**
-   * Gets the period between the start and (exclusive) end dates
+   * Gets the period between the start and (exclusive) end dates.
    */
   public Period getDatesPeriod() {
     return Period.between(startDate, endDate);
   }
 
   /**
-   * Gets the start date
+   * Gets the start date.
    */
   public LocalDate getStartDate() {
     return this.startDate;
   }
 
   /**
-   * Gets the end date (exclusive)
+   * Gets the end date (exclusive).
    */
   public LocalDate getEndDate() {
     return this.endDate;
   }
 
   /**
-   * Gets the {@link LocalTime} when intervals start
+   * Gets the {@link LocalTime} when intervals start.
    */
   public LocalTime getStartTime() {
     return this.startTime;
   }
 
   /**
-   * Gets the {@link LocalTime} when intervals end (exclusive)
+   * Gets the {@link LocalTime} when intervals end (exclusive).
    */
   public LocalTime getEndTime() {
     return this.endTime;

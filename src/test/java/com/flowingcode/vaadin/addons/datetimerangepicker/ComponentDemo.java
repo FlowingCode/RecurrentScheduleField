@@ -27,7 +27,6 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.theme.lumo.LumoUtility.AlignItems;
 
 @PageTitle("Basic")
-@SuppressWarnings("serial")
 @Route(value = "datetimerange/basic", layout = DateTimeRangePickerTabbedView.class)
 @DemoSource
 public class ComponentDemo extends VerticalLayout {

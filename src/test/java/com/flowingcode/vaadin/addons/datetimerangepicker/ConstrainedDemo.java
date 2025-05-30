@@ -31,7 +31,6 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 @PageTitle("Constrained")
-@SuppressWarnings("serial")
 @Route(value = "datetimerange/constrained", layout = DateTimeRangePickerTabbedView.class)
 @DemoSource
 public class ConstrainedDemo extends VerticalLayout {

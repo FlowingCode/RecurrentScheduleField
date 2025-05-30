@@ -28,9 +28,17 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * A class to help internationalize {@link DateTimeRangePicker} instances
+ * Provides internationalization support for {@link DateTimeRangePicker}.
+ *
+ * <h5>Features:</h5>
+ * <ul>
+ * <li>Set and retrieve titles for date, day, and time pickers.</li>
+ * <li>Configure placeholders for date and time pickers.</li>
+ * <li>Customize day initials and filter chip texts for days and times.</li>
+ * </ul>
  *
  * @author Izaguirre, Ezequiel
+ * @see DateTimeRangePicker
  */
 public class DateTimeRangePickerI18n implements Serializable {
 
@@ -52,9 +60,8 @@ public class DateTimeRangePickerI18n implements Serializable {
     }
   }
 
-
   /**
-   * Sets the date pickers' title
+   * Sets the date pickers' title.
    *
    * @param text   title for the pickers
    */
@@ -64,7 +71,7 @@ public class DateTimeRangePickerI18n implements Serializable {
   }
 
   /**
-   * Gets current date pickers' title
+   * Gets current date pickers' title.
    *
    * @return date pickers' title or {@code null} if this object is not attached to a {@code DateTimeRangePicker} instance
    */
@@ -73,7 +80,7 @@ public class DateTimeRangePickerI18n implements Serializable {
   }
 
   /**
-   * Sets the days picker's title
+   * Sets the days picker's title.
    *
    * @param text   title for the days picker
    */
@@ -83,7 +90,7 @@ public class DateTimeRangePickerI18n implements Serializable {
   }
 
   /**
-   * Gets current days picker's title
+   * Gets current days picker's title.
    *
    * @return days picker's title or {@code null} if this object is not attached to a {@code DateTimeRangePicker} instance
    */
@@ -92,7 +99,7 @@ public class DateTimeRangePickerI18n implements Serializable {
   }
 
   /**
-   * Sets the time pickers' title
+   * Sets the time pickers' title.
    *
    * @param text   title for the pickers
    */
@@ -102,7 +109,7 @@ public class DateTimeRangePickerI18n implements Serializable {
   }
 
   /**
-   * Gets current time pickers' title
+   * Gets current time pickers' title.
    *
    * @return time pickers' title or {@code null} if this object is not attached to a {@code DateTimeRangePicker} instance
    */
@@ -111,21 +118,21 @@ public class DateTimeRangePickerI18n implements Serializable {
   }
 
   /**
-   * Sets the time pickers' placeholder
+   * Sets the time pickers' placeholder.
    *
    * @param startTime   placeholder for the start-time picker
    * @param endTime     placeholder for the end-time picker
    */
   public DateTimeRangePickerI18n setTimesPlaceholder(String startTime, String endTime) {
     addAction(() -> {
-      component.getStartTime().setPlaceholder(startTime);
-      component.getEndTime().setPlaceholder(endTime);
+      component.getStartTimePicker().setPlaceholder(startTime);
+      component.getEndTimePicker().setPlaceholder(endTime);
     }, "setTimesPlaceholder");
     return this;
   }
 
   /**
-   * Gets current time pickers' placeholder
+   * Gets current time pickers' placeholder.
    *
    * @return
    * a list where the first element corresponds to the start-time picker's placeholder and the second to the end-time picker's placeholder
@@ -133,27 +140,27 @@ public class DateTimeRangePickerI18n implements Serializable {
    */
   public List<String> getTimesPlaceholder() {
     return component != null ? List.of(
-        component.getStartTime().getPlaceholder(),
-        component.getEndTime().getPlaceholder()
+        component.getStartTimePicker().getPlaceholder(),
+        component.getEndTimePicker().getPlaceholder()
     ) : null;
   }
 
   /**
-   * Sets the date pickers' placeholder
+   * Sets the date pickers' placeholder.
    *
    * @param startDate   placeholder for the start-date picker
    * @param endDate     placeholder for the end-date picker
    */
   public DateTimeRangePickerI18n setDatesPlaceholder(String startDate, String endDate) {
     addAction(() -> {
-      component.getStartDate().setPlaceholder(startDate);
-      component.getEndDate().setPlaceholder(endDate);
+      component.getStartDatePicker().setPlaceholder(startDate);
+      component.getEndDatePicker().setPlaceholder(endDate);
     }, "setDatesPlaceholder");
     return this;
   }
 
   /**
-   * Gets current date pickers' placeholder
+   * Gets current date pickers' placeholder.
    *
    * @return
    * a list where the first element corresponds to the start-date picker's placeholder and the second to the end-date picker's placeholder
@@ -161,13 +168,13 @@ public class DateTimeRangePickerI18n implements Serializable {
    */
   public List<String> getDatesPlaceholder() {
     return component != null ? List.of(
-        component.getStartDate().getPlaceholder(),
-        component.getEndDate().getPlaceholder()
+        component.getStartDatePicker().getPlaceholder(),
+        component.getEndDatePicker().getPlaceholder()
     ) : null;
   }
 
   /**
-   * Sets the week days picker's initials
+   * Sets the week days picker's initials.
    *
    * @param initials   a list of initials for the 7 days of the week
    *                   <br>The order of each depends on the order set on the picker
@@ -179,13 +186,13 @@ public class DateTimeRangePickerI18n implements Serializable {
     }
     addAction(() -> {
       component.setDaysInitials(initials);
-      component.getWeekDays().setWeekDaysShort(initials);
+      component.getWeekDaySelector().setWeekDaysShort(initials);
     }, "setDayInitials");
     return this;
   }
 
   /**
-   * Gets current week days picker's initials
+   * Gets current week days picker's initials.
    *
    * @return
    * a list of initials for the 7 days of the week. The order of each depends on the order set on the picker
@@ -197,7 +204,7 @@ public class DateTimeRangePickerI18n implements Serializable {
   }
 
   /**
-   * Sets the time filter chips' text
+   * Sets the time filter chips' text.
    *
    * @param morning       text for the morning-only chip
    * @param afternoon     text for the afternoon-only chip
@@ -213,7 +220,7 @@ public class DateTimeRangePickerI18n implements Serializable {
   }
 
   /**
-   * Gets current time filter chips' text
+   * Gets current time filter chips' text.
    *
    * @return
    * a list where the first element corresponds to the morning-only chip's text,
@@ -230,13 +237,13 @@ public class DateTimeRangePickerI18n implements Serializable {
   }
 
   /**
-   * Sets the days filter chips' text
+   * Sets the days filter chips' text.
    *
    * @param weekdays      text for the monday-to-friday chip
    * @param weekend       text for the weekends-only chip
    * @param all           text for the all days chip
    */
-  public DateTimeRangePickerI18n setDaysChipsText(String weekdays, String weekend, String all) {
+  public DateTimeRangePickerI18n setDaysChipsText(String weekend, String weekdays, String all) {
     addAction(() -> {
       component.getWeekdaysChip().setText(weekdays);
       component.getWeekendChip().setText(weekend);
@@ -246,7 +253,7 @@ public class DateTimeRangePickerI18n implements Serializable {
   }
 
   /**
-   * Gets current days filter chips' text
+   * Gets current days filter chips' text.
    *
    * @return
    * a list where the first element corresponds to the monday-to-friday chip's text,
