@@ -48,7 +48,7 @@ public class StatesDemo extends VerticalLayout {
     setSizeFull();
     addClassNames(AlignItems.CENTER);
 
-    // Component creation with initial value
+    // Component creation using an initial value
     DateTimeRange dtr = new DateTimeRange(
         LocalDate.now(),
         LocalDate.now().plusDays(10),
@@ -58,11 +58,12 @@ public class StatesDemo extends VerticalLayout {
     DateTimeRangePicker addon = new DateTimeRangePicker(dtr);
     // Set the first or leftmost day
     addon.setFirstWeekDay(DayOfWeek.THURSDAY);
-    // Use i18n utility class
+    // Use i18n utility class for localization
     addon.setI18n(new DateTimeRangePickerI18n()
         .setDatesTitle("Custom date title")
         .setTimeChipsText("AM", "PM", "AM + PM")
         .setTimesPlaceholder("Begin", "End")
+        //... and more
     );
 
     VerticalLayout buttonLayout = new VerticalLayout();

@@ -24,6 +24,7 @@ import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.dom.Style.Visibility;
 import com.vaadin.flow.function.SerializableConsumer;
 import com.vaadin.flow.theme.lumo.LumoUtility.AlignItems;
 import com.vaadin.flow.theme.lumo.LumoUtility.Border;
@@ -57,6 +58,10 @@ class ChipGroup extends HorizontalLayout {
   private Chip checkedChip;
   private boolean readOnly = false;
 
+  /**
+   * Creates an empty {@code ChipGroup}.
+   * Chips can be added later using {@link #addChip(Chip)}.
+   */
   public ChipGroup() {
     addClassNames(
         AlignItems.CENTER,
@@ -68,6 +73,11 @@ class ChipGroup extends HorizontalLayout {
     );
   }
 
+  /**
+   * Creates a {@code ChipGroup} containing the specified chips.
+   *
+   * @param chips the chips to add to this group
+   */
   public ChipGroup(Chip... chips) {
     this();
     for (Chip chip : chips) {
@@ -77,22 +87,17 @@ class ChipGroup extends HorizontalLayout {
 
   public void addChip(Chip chip) {
     chips.add(chip);
-    chip.setParent(this);
+    chip.setChipGroup(this);
     chip.setReadOnly(readOnly);
     add(chip);
   }
 
+  // Makes sure one chip is selected at most by deselecting old chips
   private void onChipChange(Chip chip) {
-    if (checkedChip != null) {
-      if (!checkedChip.equals(chip)) {
-        checkedChip.setChecked(false);
-        checkedChip = chip;
-      } else {
-        checkedChip = null;
-      }
-    } else {
-      checkedChip = chip;
+    if(checkedChip != null && chip.isChecked() && !checkedChip.equals(chip)) {
+      checkedChip.setChecked(false);
     }
+    checkedChip = chip.isChecked() ? chip : null;
   }
 
   public void setReadOnly(boolean readOnly) {
@@ -100,15 +105,31 @@ class ChipGroup extends HorizontalLayout {
     chips.forEach(c -> c.setReadOnly(readOnly));
   }
 
+  public void setVisible(boolean visible) {
+    getStyle().set("visibility", visible ? "visible" : "hidden");
+  }
+
+  /**
+   * A checkable chip component for use within a {@code ChipGroup}.
+   * Supports read-only state, and displays a check icon when checked.
+   */
   static class Chip extends HorizontalLayout {
 
-    private final Icon checkIcon;
     private boolean checked = false;
-    private final Span textField;
     private boolean readOnly = false;
-    private ChipGroup parent;
-    private SerializableConsumer<Boolean> callback;
 
+    private final Icon checkIcon;
+    private final Span textField;
+
+    // ChipGroup this chip is part of
+    private ChipGroup chipGroup;
+    // Listener added by calling onPress()
+    private SerializableConsumer<Boolean> listener;
+
+    /**
+     * Creates a new {@code Chip} with no text.
+     * The chip is initially unchecked and not read-only.
+     */
     public Chip() {
       addClassNames(
           Horizontal.MEDIUM,
@@ -132,15 +153,15 @@ class ChipGroup extends HorizontalLayout {
           Padding.NONE,
           LineHeight.SMALL
       );
+
       addClickListener(ev -> {
         if (!readOnly) {
-          this.checked = !this.checked;
-          toggle();
-          if (callback != null) {
-            callback.accept(this.checked);
+          toggle(!this.checked);
+          if (listener != null) {
+            listener.accept(this.checked);
           }
-          if (parent != null) {
-            parent.onChipChange(this);
+          if (chipGroup != null) {
+            chipGroup.onChipChange(this);
           }
         }
       });
@@ -148,8 +169,9 @@ class ChipGroup extends HorizontalLayout {
       add(textField);
     }
 
-    private void toggle() {
-      if (checked) {
+    // Switches UI to given state
+    private void toggle(Boolean isChecked) {
+      if (isChecked) {
         removeClassName("fc-dtrp-unselected");
         addClassName("fc-dtrp-selected");
         addComponentAsFirst(checkIcon);
@@ -158,19 +180,19 @@ class ChipGroup extends HorizontalLayout {
         addClassName("fc-dtrp-unselected");
         remove(checkIcon);
       }
+      this.checked = isChecked;
     }
 
-    private void setParent(ChipGroup parent) {
-      this.parent = parent;
+    private void setChipGroup(ChipGroup chipGroup) {
+      this.chipGroup = chipGroup;
     }
 
     public void onPress(SerializableConsumer<Boolean> onClick) {
-      this.callback = onClick;
+      this.listener = onClick;
     }
 
-    public void setChecked(boolean checked) {
-      this.checked = checked;
-      toggle();
+    public void setChecked(boolean isChecked) {
+      toggle(isChecked);
     }
 
     public boolean isChecked() {

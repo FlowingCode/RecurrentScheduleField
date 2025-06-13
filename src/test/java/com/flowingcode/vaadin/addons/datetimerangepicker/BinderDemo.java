@@ -49,55 +49,56 @@ public class BinderDemo extends VerticalLayout {
   private final Button dateButton = new Button("Show dates range");
   private final Button daysButton = new Button("Show days");
   private final Button timeButton = new Button("Show times range");
-  private final Button interButton = new Button("Update intervals");
+  private final Button intervalButton = new Button("Update intervals");
   private final List<TimeInterval> intervals = new ArrayList<>();
 
+  private Grid<TimeInterval> grid = null;
+  private GridListDataView<TimeInterval> dataView = null;
+
   /*
-    DateTimeRangePicker::getValue returns a DateTimeRange instance (when fields are valid).
-    You operate TimeInterval instances using that class.
+    DateTimeRangePicker will return a DateTimeRange instance when valid.
+    Then you may use that object to operate TimeInterval instances.
     TimeInterval represents a time interval (ISO 8601), defined by start and end points.
   */
   public BinderDemo() {
     setSizeFull();
     addClassNames(AlignItems.CENTER);
 
-    // Component creation
+    // Basic component creation
     DateTimeRangePicker addon = new DateTimeRangePicker();
     // Distance between start and end dates is at most 30 days
     addon.setMaxDaysSpan(30);
 
-    // An object with getter/setter for DateTimeRange
+    // An object with simple getter/setter methods
     Pojo pojo = new Pojo();
 
+    // Bind the object with the component
     Binder<Pojo> binder = new Binder<>(Pojo.class);
     binder.forField(addon)
         .bind(Pojo::getDateTimeRange, Pojo::setDateTimeRange);
     binder.setBean(pojo);
 
+    // The component will be valid when dates, days and times are set properly,
+    // and a DateTimeRange instance will be available in 'pojo' at this point
     binder.addStatusChangeListener(ev -> {
       boolean isValid = binder.isValid();
       dateButton.setEnabled(isValid);
       daysButton.setEnabled(isValid);
       timeButton.setEnabled(isValid);
-      interButton.setEnabled(isValid);
+      intervalButton.setEnabled(isValid);
     });
 
-    Grid<TimeInterval> grid = new Grid<>(TimeInterval.class, false);
-    Grid.Column<TimeInterval> firstCol = grid.addColumn(i -> i.getStartDate().getDayOfWeek()).setHeader("Week day")
-        .setSortable(true);
-    grid.addColumn(TimeInterval::getStartDate).setHeader("Start")
-        .setSortable(true);
-    grid.addColumn(TimeInterval::getEndDate).setHeader("End").setSortable(true);
-    grid.addColumn(i -> formatDuration(i.getDuration())).setHeader("Duration");
+    // Rest of the code is grid and buttons configuration...
+    grid = new Grid<>(TimeInterval.class, false);
+    dataView = grid.setItems(intervals);
 
-    GridListDataView<TimeInterval> dataView = grid.setItems(intervals);
-    dataView.addItemCountChangeListener(c -> firstCol.setFooter("Total: " + c.getItemCount()));
-    grid.setWidth("75%");
-    grid.addClassName(Horizontal.AUTO);
-
-    HorizontalLayout buttonLayout = new HorizontalLayout();
-    buttonLayout.setAlignItems(Alignment.CENTER);
-    buttonLayout.add(dateButton, daysButton, timeButton);
+    intervalButton.addClickListener(ev -> {
+      intervals.clear();
+      // Fetch time intervals
+      intervals.addAll(pojo.getDateTimeRange().getIntervals());
+      dataView.refreshAll();
+    });
+    intervalButton.setEnabled(false);
 
     dateButton.addClickListener(ev -> {
       DateTimeRange result = pojo.getDateTimeRange();
@@ -137,15 +138,22 @@ public class BinderDemo extends VerticalLayout {
     });
     timeButton.setEnabled(false);
 
-    interButton.addClickListener(ev -> {
-      intervals.clear();
-      intervals.addAll(pojo.getDateTimeRange().getIntervals());
-      dataView.refreshAll();
-    });
-    interButton.setEnabled(false);
+    Grid.Column<TimeInterval> firstCol = grid.addColumn(i -> i.getStartDate().getDayOfWeek()).setHeader("Week day")
+        .setSortable(true);
+    grid.addColumn(TimeInterval::getStartDate).setHeader("Start")
+        .setSortable(true);
+    grid.addColumn(TimeInterval::getEndDate).setHeader("End").setSortable(true);
+    grid.addColumn(i -> formatDuration(i.getDuration())).setHeader("Duration");
 
-    add(addon, buttonLayout, interButton, grid);
+    dataView.addItemCountChangeListener(c -> firstCol.setFooter("Total: " + c.getItemCount()));
+    grid.setWidth("75%");
+    grid.addClassName(Horizontal.AUTO);
 
+    HorizontalLayout buttonLayout = new HorizontalLayout();
+    buttonLayout.setAlignItems(Alignment.CENTER);
+    buttonLayout.add(dateButton, daysButton, timeButton);
+
+    add(addon, buttonLayout, intervalButton, grid);
   }
 
   private static class Pojo {
@@ -161,6 +169,7 @@ public class BinderDemo extends VerticalLayout {
     }
   }
 
+  // Show duration as HH:mm:ss
   private static String formatDuration(Duration duration) {
     return String.format("%02d:%02d:%02d",
         duration.toHoursPart(),
@@ -168,6 +177,4 @@ public class BinderDemo extends VerticalLayout {
         duration.toSecondsPart()
     );
   }
-
-
 }

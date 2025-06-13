@@ -68,7 +68,7 @@ import java.util.Set;
  * Provides validation, customization, and internationalization support for flexible scheduling.
  * </p>
  *
- * @author Izaguirre, Ezequiel
+ * @author Flowing Code
  * @see DateTimeRange
  */
 public class DateTimeRangePicker
@@ -112,10 +112,18 @@ public class DateTimeRangePicker
   private List<String> daysInitials;
   private Integer maxDaysSpan = null;
 
+  /**
+   * Creates a new {@code DateTimeRangePicker} with the default error message.
+   */
   public DateTimeRangePicker() {
     this(defaultErrorMessage);
   }
 
+  /**
+   * Creates a new {@code DateTimeRangePicker} with a custom error message.
+   *
+   * @param errorMessage the error message to display when validation fails
+   */
   public DateTimeRangePicker(String errorMessage) {
     super();
     setUI();
@@ -123,6 +131,12 @@ public class DateTimeRangePicker
     setErrorMessage(errorMessage);
   }
 
+  /**
+   * Creates a new {@code DateTimeRangePicker} with a default value and custom error message.
+   *
+   * @param defaultValue the initial {@link DateTimeRange} value
+   * @param errorMessage the error message to display when validation fails
+   */
   public DateTimeRangePicker(DateTimeRange defaultValue, String errorMessage) {
     super(defaultValue);
     setUI();
@@ -131,6 +145,11 @@ public class DateTimeRangePicker
     setPresentationValue(defaultValue);
   }
 
+  /**
+   * Creates a new {@code DateTimeRangePicker} with a default value.
+   *
+   * @param defaultValue the initial {@link DateTimeRange} value
+   */
   public DateTimeRangePicker(DateTimeRange defaultValue) {
     this(defaultValue, defaultErrorMessage);
   }
@@ -576,6 +595,15 @@ public class DateTimeRangePicker
   }
 
   /**
+   * Changes the days chips' visibility state.
+   *
+   * @param visible whether the days chips should be visible
+   */
+  public void setDaysChipsVisible(boolean visible) {
+    daysChipGroup.setVisible(visible);
+  }
+
+  /**
    * Changes the time pickers' read-only state.
    *
    * @param readOnly whether the time pickers should be read-only
@@ -593,6 +621,15 @@ public class DateTimeRangePicker
    */
   public void setTimesVisible(boolean visible) {
     timeSelector.setVisible(visible);
+  }
+
+  /**
+   * Changes the time chips' visibility state.
+   *
+   * @param visible whether the time chips should be visible
+   */
+  public void setTimeChipsVisible(boolean visible) {
+    timeChipGroup.setVisible(visible);
   }
 
   /**

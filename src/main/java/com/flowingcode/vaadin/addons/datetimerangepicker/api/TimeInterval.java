@@ -28,7 +28,7 @@ import java.util.Objects;
  * A class that represents a time interval (<em>a time period defined by start and end points</em>) according to
  * <a href="https://en.wikipedia.org/wiki/ISO_8601#Time_intervals">ISO 8601</a>.
  *
- * @author Izaguirre, Ezequiel
+ * @author Flowing Code
  * @see DateTimeRange
  */
 public class TimeInterval implements Serializable, Comparable<TimeInterval> {
@@ -36,6 +36,13 @@ public class TimeInterval implements Serializable, Comparable<TimeInterval> {
   private final LocalDateTime startDate;
   private final LocalDateTime endDate;
 
+  /**
+   * Creates a new {@code TimeInterval} with the specified start and end date-times.
+   *
+   * @param start the inclusive start date-time of the interval
+   * @param end the exclusive end date-time of the interval
+   * @throws IllegalArgumentException if {@code start} is not before {@code end}
+   */
   public TimeInterval(LocalDateTime start, LocalDateTime end) {
     if (!start.isBefore(end)) {
       throw new IllegalArgumentException("Start time must be before end time");

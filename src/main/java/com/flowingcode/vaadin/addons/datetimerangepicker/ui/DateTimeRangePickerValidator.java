@@ -28,13 +28,30 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Set;
 
+/**
+ * Validator for {@link DateTimeRangePicker} component.
+ * <p>
+ * Ensures that the selected date and time ranges, as well as the selected weekdays,
+ * are valid according to the component's rules.
+ * </p>
+ *
+ * @author Flowing Code
+ */
 public class DateTimeRangePickerValidator implements Validator<DateTimeRange> {
 
   private final DateTimeRangePicker model;
 
+  /**
+   * Creates a new validator for the specified {@link DateTimeRangePicker} component.
+   * <p>
+   * Attaches manual validation to the date, time, and weekday selection fields of the picker.
+   * </p>
+   *
+   * @param model the {@code DateTimeRangePicker} component to validate
+   */
   public DateTimeRangePickerValidator(DateTimeRangePicker model) {
-    this.model = model;
-    setManualValidation();
+      this.model = model;
+      setManualValidation();
   }
 
   private void setManualValidation() {

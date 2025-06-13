@@ -30,6 +30,9 @@ class Circle extends Div {
 
   private final Div circle;
 
+  /**
+   * Creates a new {@code Circle} component.
+   */
   public Circle() {
     circle = new Div();
 

@@ -39,14 +39,23 @@ public class ConstrainedDemo extends VerticalLayout {
     setSizeFull();
     addClassNames(AlignItems.CENTER);
 
-    // Component creation
+    // Basic component creation
     DateTimeRangePicker addon = new DateTimeRangePicker();
+    // Min selectable date
     addon.setMinDate(LocalDate.now());
+    // Max selectable date
     addon.setMaxDate(LocalDate.now().plusDays(15));
+    // Select days of the week programmatically
     addon.setWeekDays(DayOfWeek.MONDAY, DayOfWeek.FRIDAY);
+    // Days will be unmodifiable
     addon.setDaysReadOnly(true);
+    // Interval between selectable time items
+    // Only times at 15-minute steps will be shown as options
     addon.setTimeStep(Duration.ofMinutes(15));
+    // Min selectable time
     addon.setMinTime(LocalTime.of(13, 30));
+    // Max selectable time
+    // Both options will constraint the chips as well
     addon.setMaxTime(LocalTime.of(20, 0));
 
     add(addon);

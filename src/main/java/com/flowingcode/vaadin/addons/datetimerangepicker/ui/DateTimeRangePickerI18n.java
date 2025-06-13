@@ -37,7 +37,7 @@ import java.util.Map;
  * <li>Customize day initials and filter chip texts for days and times.</li>
  * </ul>
  *
- * @author Izaguirre, Ezequiel
+ * @author Flowing Code
  * @see DateTimeRangePicker
  */
 public class DateTimeRangePickerI18n implements Serializable {

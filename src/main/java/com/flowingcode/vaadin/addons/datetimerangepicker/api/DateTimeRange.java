@@ -53,7 +53,7 @@ import java.util.TreeSet;
  * <li>Calculate interval duration or the period between start and end dates.</li>
  * </ul>
  *
- * @author Izaguirre, Ezequiel
+ * @author Flowing Code
  * @see TimeInterval
  */
 public class DateTimeRange implements Serializable {
@@ -68,7 +68,14 @@ public class DateTimeRange implements Serializable {
   private LocalTime startTime = defaultStartTime;
   private LocalTime endTime = defaultEndTime;
 
-
+  /**
+   * Creates a new {@code DateTimeRange} with the specified start and end dates, and included days of the week.
+   *
+   * @param startDate the inclusive start date of the range
+   * @param endDate the exclusive end date of the range
+   * @param weekDays the set of included {@link DayOfWeek} values
+   * @throws IllegalArgumentException if {@code startDate} is not before {@code endDate}, or if {@code weekDays} is null or empty
+   */
   public DateTimeRange(LocalDate startDate, LocalDate endDate, Set<DayOfWeek> weekDays) {
     if (!startDate.isBefore(endDate)) {
       throw new IllegalArgumentException("startDate must be before endDate");
@@ -78,16 +85,42 @@ public class DateTimeRange implements Serializable {
     setWeekDays(weekDays);
   }
 
+  /**
+   * Creates a new {@code DateTimeRange} with the specified start and end dates, including all days of the week.
+   *
+   * @param startDate the inclusive start date of the range
+   * @param endDate the exclusive end date of the range
+   * @throws IllegalArgumentException if {@code startDate} is not before {@code endDate}
+   */
   public DateTimeRange(LocalDate startDate, LocalDate endDate) {
     this(startDate, endDate, Set.of(defaultWeekDays));
   }
 
+  /**
+   * Creates a new {@code DateTimeRange} with the specified dates, time boundaries, and included days of the week.
+   *
+   * @param startDate the inclusive start date of the range
+   * @param endDate the exclusive end date of the range
+   * @param startTime the inclusive start time of each interval
+   * @param endTime the exclusive end time of each interval
+   * @param weekDays the set of included {@link DayOfWeek} values
+   * @throws IllegalArgumentException if {@code startDate} is not before {@code endDate}, if {@code startTime} is not before {@code endTime}, or if {@code weekDays} is null or empty
+   */
   public DateTimeRange(LocalDate startDate, LocalDate endDate, LocalTime startTime, LocalTime endTime,
       Set<DayOfWeek> weekDays) {
     this(startDate, endDate, weekDays);
     setDayDuration(startTime, endTime);
   }
 
+  /**
+   * Creates a new {@code DateTimeRange} with the specified dates and time boundaries, including all days of the week.
+   *
+   * @param startDate the inclusive start date of the range
+   * @param endDate the exclusive end date of the range
+   * @param startTime the inclusive start time of each interval
+   * @param endTime the exclusive end time of each interval
+   * @throws IllegalArgumentException if {@code startDate} is not before {@code endDate}, or if {@code startTime} is not before {@code endTime}
+   */
   public DateTimeRange(LocalDate startDate, LocalDate endDate, LocalTime startTime, LocalTime endTime) {
     this(startDate, endDate, startTime, endTime, Set.of(defaultWeekDays));
   }

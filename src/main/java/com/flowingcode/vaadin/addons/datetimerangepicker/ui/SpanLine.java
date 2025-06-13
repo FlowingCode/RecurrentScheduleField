@@ -31,6 +31,9 @@ class SpanLine extends Div {
 
   private final Paragraph label = new Paragraph();
 
+  /**
+   * Creates a new horizontal line with an optional label.
+   */
   public SpanLine() {
 
     addClassName("fc-dtrp-linespan");

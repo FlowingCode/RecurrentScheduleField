@@ -35,7 +35,7 @@ public class ComponentDemo extends VerticalLayout {
     setSizeFull();
     addClassNames(AlignItems.CENTER);
 
-    // Component creation
+    // Basic component creation
     DateTimeRangePicker addon = new DateTimeRangePicker();
     add(addon);
   }
