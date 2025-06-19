@@ -5,14 +5,14 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.flowingcode.vaadin.addons</groupId>
-    <artifactId>template-addon</artifactId>
+    <artifactId>date-time-range-picker-addon</artifactId>
     <version>1.0.0-SNAPSHOT</version>
-    <name>Template Add-on</name>
-    <description>Template Add-on for Vaadin Flow</description>
+    <name>Date Time Range Picker Add-on</name>
+    <description>Component that facilitates the selection of a date and time range</description>
     <url>https://www.flowingcode.com/en/open-source/</url>
 
     <properties>
-        <vaadin.version>24.4.6</vaadin.version>
+        <vaadin.version>24.4.7</vaadin.version>
         <selenium.version>4.10.0</selenium.version>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
@@ -38,9 +38,9 @@
     </licenses>
 
     <scm>
-        <url>https://github.com/FlowingCode/AddonStarter24</url>
-        <connection>scm:git:git://github.com/FlowingCode/AddonStarter24.git</connection>
-        <developerConnection>scm:git:ssh://git@github.com:/FlowingCode/AddonStarter24.git</developerConnection>
+        <url>https://github.com/FlowingCode/DateTimeRangePicker</url>
+        <connection>scm:git:git://github.com/FlowingCode/DateTimeRangePicker.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com:/FlowingCode/DateTimeRangePicker.git</developerConnection>
         <tag>master</tag>
     </scm>
 
@@ -156,6 +156,13 @@
             <version>5.9.1</version>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>com.flowingcode.vaadin.addons</groupId>
+            <artifactId>day-of-week-selector-addon</artifactId>
+            <version>1.0.1</version>
+        </dependency>
+
     </dependencies>
 
     <build>

@@ -1,8 +1,8 @@
 /*-
  * #%L
- * Template Add-on
+ * DateTimeRangePicker Add-on
  * %%
- * Copyright (C) 2024 Flowing Code
+ * Copyright (C) 2025 Flowing Code
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,22 +17,19 @@
  * limitations under the License.
  * #L%
  */
-package com.flowingcode.vaadin.addons.template;
 
-import com.flowingcode.vaadin.addons.DemoLayout;
-import com.flowingcode.vaadin.addons.GithubLink;
-import com.flowingcode.vaadin.addons.demo.TabbedDemo;
-import com.vaadin.flow.router.ParentLayout;
+package com.flowingcode.vaadin.addons.datetimerangepicker;
+
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.router.BeforeEnterEvent;
+import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.Route;
 
-@SuppressWarnings("serial")
-@ParentLayout(DemoLayout.class)
-@Route("template")
-@GithubLink("https://github.com/FlowingCode/AddonStarter24")
-public class TemplateDemoView extends TabbedDemo {
+@Route("")
+public class DemoView extends VerticalLayout implements BeforeEnterObserver {
 
-  public TemplateDemoView() {
-    addDemo(TemplateDemo.class);
-    setSizeFull();
+  @Override
+  public void beforeEnter(BeforeEnterEvent event) {
+    event.forwardTo(DateTimeRangePickerTabbedView.class);
   }
 }

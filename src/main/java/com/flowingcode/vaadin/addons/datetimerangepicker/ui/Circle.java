@@ -17,14 +17,32 @@
  * limitations under the License.
  * #L%
  */
-package com.flowingcode.vaadin.addons;
+package com.flowingcode.vaadin.addons.datetimerangepicker.ui;
 
 import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.router.RouterLayout;
 
-public class DemoLayout extends Div implements RouterLayout {
+/**
+ * A simple UI component representing a circular indicator.
+ * The circle's background color can be customized using the {@link #setColor(String)} method.
+ * This component is styled with the "fc-dtrp-circle" CSS class.
+ */
+class Circle extends Div {
 
-  public DemoLayout() {
-    setSizeFull();
+  private final Div circle;
+
+  /**
+   * Creates a new {@code Circle} component.
+   */
+  public Circle() {
+    circle = new Div();
+
+    addClassName("fc-dtrp-circle");
+
+    add(circle);
   }
+
+  public void setColor(String background) {
+    circle.getStyle().setBackgroundColor(background);
+  }
+
 }
