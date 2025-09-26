@@ -1,6 +1,6 @@
 /*-
  * #%L
- * DateTimeRangePicker Add-on
+ * RecurrentScheduleField Add-on
  * %%
  * Copyright (C) 2025 Flowing Code
  * %%
@@ -17,12 +17,12 @@
  * limitations under the License.
  * #L%
  */
-package com.flowingcode.vaadin.addons.datetimerangepicker.ui;
+package com.flowingcode.vaadin.addons.recurrentschedulefield.ui;
 
-import com.flowingcode.vaadin.addons.datetimerangepicker.api.DateTimeRange;
-import com.flowingcode.vaadin.addons.datetimerangepicker.api.TimeInterval;
-import com.flowingcode.vaadin.addons.datetimerangepicker.ui.ChipGroup.Chip;
 import com.flowingcode.vaadin.addons.dayofweekselector.DayOfWeekSelector;
+import com.flowingcode.vaadin.addons.recurrentschedulefield.api.DateTimeRange;
+import com.flowingcode.vaadin.addons.recurrentschedulefield.api.TimeInterval;
+import com.flowingcode.vaadin.addons.recurrentschedulefield.ui.ChipGroup.Chip;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.customfield.CustomField;
 import com.vaadin.flow.component.datepicker.DatePicker;
@@ -71,7 +71,7 @@ import java.util.Set;
  * @author Flowing Code
  * @see DateTimeRange
  */
-public class DateTimeRangePicker
+public class RecurrentScheduleField
     extends CustomField<DateTimeRange> implements HasValidator<DateTimeRange> {
 
   static final String defaultErrorMessage = "Invalid or incomplete fields remaining";
@@ -79,7 +79,7 @@ public class DateTimeRangePicker
   private static final String ERROR_COLOR = "var(--lumo-error-color)";
 
   // Mandatory attributes for validation
-  private DateTimeRangePickerValidator validator;
+  private RecurrentScheduleFieldValidator validator;
   private DatePicker startDatePicker;
   private DatePicker endDatePicker;
   private TimePicker startTimePicker;
@@ -113,18 +113,18 @@ public class DateTimeRangePicker
   private Integer maxDaysSpan = null;
 
   /**
-   * Creates a new {@code DateTimeRangePicker} with the default error message.
+   * Creates a new {@code RecurrentScheduleField} with the default error message.
    */
-  public DateTimeRangePicker() {
+  public RecurrentScheduleField() {
     this(defaultErrorMessage);
   }
 
   /**
-   * Creates a new {@code DateTimeRangePicker} with a custom error message.
+   * Creates a new {@code RecurrentScheduleField} with a custom error message.
    *
    * @param errorMessage the error message to display when validation fails
    */
-  public DateTimeRangePicker(String errorMessage) {
+  public RecurrentScheduleField(String errorMessage) {
     super();
     setUI();
     setDefaultI18n();
@@ -132,12 +132,12 @@ public class DateTimeRangePicker
   }
 
   /**
-   * Creates a new {@code DateTimeRangePicker} with a default value and custom error message.
+   * Creates a new {@code RecurrentScheduleField} with a default value and custom error message.
    *
    * @param defaultValue the initial {@link DateTimeRange} value
    * @param errorMessage the error message to display when validation fails
    */
-  public DateTimeRangePicker(DateTimeRange defaultValue, String errorMessage) {
+  public RecurrentScheduleField(DateTimeRange defaultValue, String errorMessage) {
     super(defaultValue);
     setUI();
     setDefaultI18n();
@@ -146,11 +146,11 @@ public class DateTimeRangePicker
   }
 
   /**
-   * Creates a new {@code DateTimeRangePicker} with a default value.
+   * Creates a new {@code RecurrentScheduleField} with a default value.
    *
    * @param defaultValue the initial {@link DateTimeRange} value
    */
-  public DateTimeRangePicker(DateTimeRange defaultValue) {
+  public RecurrentScheduleField(DateTimeRange defaultValue) {
     this(defaultValue, defaultErrorMessage);
   }
 
@@ -191,7 +191,7 @@ public class DateTimeRangePicker
         Flex.GROW
     );
 
-    validator = new DateTimeRangePickerValidator(this);
+    validator = new RecurrentScheduleFieldValidator(this);
 
     mainLayout.add(dateSelector, daysSelector, timeSelector);
     rootLayout.add(verticalLine, mainLayout);
@@ -402,7 +402,7 @@ public class DateTimeRangePicker
   }
 
   /**
-   * Retrieves the current value of the DateTimeRangePicker component.
+   * Retrieves the current value of the RecurrentScheduleField component.
    *
    * @return the current {@link DateTimeRange} value, or null if the fields are invalid or incomplete
    */
@@ -668,9 +668,9 @@ public class DateTimeRangePicker
    * Sets the custom text properties for internationalization purposes.
    *
    * @param i18n instance to attach
-   * @see DateTimeRangePickerI18n
+   * @see RecurrentScheduleFieldI18n
    */
-  public void setI18n(DateTimeRangePickerI18n i18n) {
+  public void setI18n(RecurrentScheduleFieldI18n i18n) {
     if(i18n != null) {
       i18n.attachComponent(this);
       for (SerializableRunnable action : i18n.getPendingActions()) {
@@ -681,7 +681,7 @@ public class DateTimeRangePicker
   }
 
   private void setDefaultI18n() {
-    DateTimeRangePickerI18n defaultI18n = new DateTimeRangePickerI18n()
+    RecurrentScheduleFieldI18n defaultI18n = new RecurrentScheduleFieldI18n()
         .setDatesTitle("Select dates range")
         .setDatesPlaceholder("Start date", "End date")
         .setDaysTitle("Select days")

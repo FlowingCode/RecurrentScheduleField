@@ -1,6 +1,6 @@
 /*-
  * #%L
- * DateTimeRangePicker Add-on
+ * RecurrentScheduleField Add-on
  * %%
  * Copyright (C) 2025 Flowing Code
  * %%
@@ -17,12 +17,12 @@
  * limitations under the License.
  * #L%
  */
-package com.flowingcode.vaadin.addons.datetimerangepicker;
+package com.flowingcode.vaadin.addons.recurrentschedulefield;
 
-import com.flowingcode.vaadin.addons.datetimerangepicker.api.DateTimeRange;
-import com.flowingcode.vaadin.addons.datetimerangepicker.ui.DateTimeRangePickerI18n;
 import com.flowingcode.vaadin.addons.demo.DemoSource;
-import com.flowingcode.vaadin.addons.datetimerangepicker.ui.DateTimeRangePicker;
+import com.flowingcode.vaadin.addons.recurrentschedulefield.api.DateTimeRange;
+import com.flowingcode.vaadin.addons.recurrentschedulefield.ui.RecurrentScheduleField;
+import com.flowingcode.vaadin.addons.recurrentschedulefield.ui.RecurrentScheduleFieldI18n;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -36,7 +36,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @PageTitle("States")
-@Route(value = "datetimerange/states", layout = DateTimeRangePickerTabbedView.class)
+@Route(value = "recurrent-schedule-field/states", layout = RecurrentScheduleFieldDemoView.class)
 @DemoSource
 public class StatesDemo extends VerticalLayout {
 
@@ -55,11 +55,11 @@ public class StatesDemo extends VerticalLayout {
         LocalTime.MIN,
         LocalTime.NOON
     );
-    DateTimeRangePicker addon = new DateTimeRangePicker(dtr);
+    RecurrentScheduleField field = new RecurrentScheduleField(dtr);
     // Set the first or leftmost day
-    addon.setFirstWeekDay(DayOfWeek.THURSDAY);
+    field.setFirstWeekDay(DayOfWeek.THURSDAY);
     // Use i18n utility class for localization
-    addon.setI18n(new DateTimeRangePickerI18n()
+    field.setI18n(new RecurrentScheduleFieldI18n()
         .setDatesTitle("Custom date title")
         .setTimeChipsText("AM", "PM", "AM + PM")
         .setTimesPlaceholder("Begin", "End")
@@ -70,10 +70,9 @@ public class StatesDemo extends VerticalLayout {
     HorizontalLayout readOnlyLayout = new HorizontalLayout();
     HorizontalLayout visibleLayout = new HorizontalLayout();
 
-    Button indicatorButton = new Button("Toggle indicator", ev ->
-    {
+    Button indicatorButton = new Button("Toggle indicator", ev -> {
       indicator = !indicator;
-      addon.setIndicatorVisible(indicator);
+      field.setIndicatorVisible(indicator);
     });
 
     for(PickerSection section : PickerSection.values()) {
@@ -83,9 +82,9 @@ public class StatesDemo extends VerticalLayout {
                 boolean value = !readOnly.getOrDefault(section, false);
                 readOnly.put(section, value);
                 switch(section) {
-                  case DATES -> addon.setDatesReadOnly(value);
-                  case DAYS -> addon.setDaysReadOnly(value);
-                  case TIMES -> addon.setTimesReadOnly(value);
+                  case DATES -> field.setDatesReadOnly(value);
+                  case DAYS -> field.setDaysReadOnly(value);
+                  case TIMES -> field.setTimesReadOnly(value);
                 }
               }
           )
@@ -96,9 +95,9 @@ public class StatesDemo extends VerticalLayout {
                 boolean value = !visible.getOrDefault(section, true);
                 visible.put(section, value);
                 switch(section) {
-                  case DATES -> addon.setDatesVisible(value);
-                  case DAYS -> addon.setDaysVisible(value);
-                  case TIMES -> addon.setTimesVisible(value);
+                  case DATES -> field.setDatesVisible(value);
+                  case DAYS -> field.setDaysVisible(value);
+                  case TIMES -> field.setTimesVisible(value);
                 }
               }
           )
@@ -110,9 +109,9 @@ public class StatesDemo extends VerticalLayout {
     visibleLayout.setAlignItems(Alignment.CENTER);
 
     buttonLayout.add(indicatorButton, readOnlyLayout, visibleLayout);
-    add(addon, buttonLayout);
+    add(field, buttonLayout);
   }
 
-  // Represents the different sections of the DateTimeRangePicker that can be toggled
+  // Represents the different sections of the RecurrentScheduleField that can be toggled
   private enum PickerSection {DATES, DAYS, TIMES}
 }

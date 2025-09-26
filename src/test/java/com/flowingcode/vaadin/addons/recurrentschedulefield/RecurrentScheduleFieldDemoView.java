@@ -1,6 +1,6 @@
 /*-
  * #%L
- * DateTimeRangePicker Add-on
+ * RecurrentScheduleField Add-on
  * %%
  * Copyright (C) 2025 Flowing Code
  * %%
@@ -17,7 +17,7 @@
  * limitations under the License.
  * #L%
  */
-package com.flowingcode.vaadin.addons.datetimerangepicker;
+package com.flowingcode.vaadin.addons.recurrentschedulefield;
 
 import com.flowingcode.vaadin.addons.DemoLayout;
 import com.flowingcode.vaadin.addons.GithubLink;
@@ -26,11 +26,11 @@ import com.vaadin.flow.router.ParentLayout;
 import com.vaadin.flow.router.Route;
 
 @ParentLayout(DemoLayout.class)
-@Route("datetimerange")
-@GithubLink("https://github.com/FlowingCode/DateTimeRangePicker")
-public class DateTimeRangePickerTabbedView extends TabbedDemo {
+@Route("recurrent-schedule-field")
+@GithubLink("https://github.com/FlowingCode/RecurrentScheduleField")
+public class RecurrentScheduleFieldDemoView extends TabbedDemo {
 
-  public DateTimeRangePickerTabbedView() {
+  public RecurrentScheduleFieldDemoView() {
     addDemo(ComponentDemo.class);
     addDemo(BinderDemo.class);
     addDemo(StatesDemo.class);

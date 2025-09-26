@@ -1,21 +1,21 @@
-.fc-dtrp-hoverable:hover, .fc-dtrp-selected {
+.fc-rsf-hoverable:hover, .fc-rsf-selected {
   background: var(--lumo-primary-color-50pct);
   color: var(--lumo-primary-contrast-color);
   cursor: pointer;
   border-style: solid;
 }
 
-.fc-dtrp-readonly {
+.fc-rsf-readonly {
   cursor: default;
   border-style: dashed;
 }
 
-.fc-dtrp-unselected {
+.fc-rsf-unselected {
   background : initial
 }
 
 /* Horizontal line container with centered text overlay */
-.fc-dtrp-linespan {
+.fc-rsf-linespan {
   display : inline-flex;
   align-items : center;
   justify-content : center;
@@ -51,7 +51,7 @@
   }
 }
 
-.fc-dtrp-circle {
+.fc-rsf-circle {
   left : calc((var(--lumo-space-m) + 12px - 6px) * -1);
   background: var(--lumo-base-color);
   position: absolute;

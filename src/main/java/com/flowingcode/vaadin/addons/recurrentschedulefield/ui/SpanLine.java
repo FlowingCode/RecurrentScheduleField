@@ -1,6 +1,6 @@
 /*-
  * #%L
- * DateTimeRangePicker Add-on
+ * RecurrentScheduleField Add-on
  * %%
  * Copyright (C) 2025 Flowing Code
  * %%
@@ -17,14 +17,14 @@
  * limitations under the License.
  * #L%
  */
-package com.flowingcode.vaadin.addons.datetimerangepicker.ui;
+package com.flowingcode.vaadin.addons.recurrentschedulefield.ui;
 
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Paragraph;
 
 /**
  * A simple UI component representing a horizontal line with an optional label.
- * The line is styled with the "fc-dtrp-linespan" CSS class.
+ * The line is styled with the "fc-rsf-linespan" CSS class.
  * The label text can be set or cleared using the {@link #setText(String)} and {@link #clearText()} methods.
  */
 class SpanLine extends Div {
@@ -36,7 +36,7 @@ class SpanLine extends Div {
    */
   public SpanLine() {
 
-    addClassName("fc-dtrp-linespan");
+    addClassName("fc-rsf-linespan");
 
     Div line = new Div();
 

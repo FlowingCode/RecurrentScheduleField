@@ -1,6 +1,6 @@
 /*-
  * #%L
- * DateTimeRangePicker Add-on
+ * RecurrentScheduleField Add-on
  * %%
  * Copyright (C) 2025 Flowing Code
  * %%
@@ -17,18 +17,19 @@
  * limitations under the License.
  * #L%
  */
-package com.flowingcode.vaadin.addons.datetimerangepicker.test;
+package com.flowingcode.vaadin.addons.recurrentschedulefield.test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
-import com.flowingcode.vaadin.addons.datetimerangepicker.api.DateTimeRange;
-import com.flowingcode.vaadin.addons.datetimerangepicker.api.TimeInterval;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Set;
 import org.junit.Test;
+
+import com.flowingcode.vaadin.addons.recurrentschedulefield.api.DateTimeRange;
+import com.flowingcode.vaadin.addons.recurrentschedulefield.api.TimeInterval;
 
 public class DateTimeRangeTest {
 

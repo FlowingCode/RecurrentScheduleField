@@ -1,6 +1,6 @@
 /*-
  * #%L
- * DateTimeRangePicker Add-on
+ * RecurrentScheduleField Add-on
  * %%
  * Copyright (C) 2025 Flowing Code
  * %%
@@ -17,17 +17,17 @@
  * limitations under the License.
  * #L%
  */
-package com.flowingcode.vaadin.addons.datetimerangepicker;
+package com.flowingcode.vaadin.addons.recurrentschedulefield;
 
 import com.flowingcode.vaadin.addons.demo.DemoSource;
-import com.flowingcode.vaadin.addons.datetimerangepicker.ui.DateTimeRangePicker;
+import com.flowingcode.vaadin.addons.recurrentschedulefield.ui.RecurrentScheduleField;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.theme.lumo.LumoUtility.AlignItems;
 
 @PageTitle("Basic")
-@Route(value = "datetimerange/basic", layout = DateTimeRangePickerTabbedView.class)
+@Route(value = "recurrent-schedule-field/basic", layout = RecurrentScheduleFieldDemoView.class)
 @DemoSource
 public class ComponentDemo extends VerticalLayout {
 
@@ -36,7 +36,7 @@ public class ComponentDemo extends VerticalLayout {
     addClassNames(AlignItems.CENTER);
 
     // Basic component creation
-    DateTimeRangePicker addon = new DateTimeRangePicker();
-    add(addon);
+    RecurrentScheduleField field = new RecurrentScheduleField();
+    add(field);
   }
 }
