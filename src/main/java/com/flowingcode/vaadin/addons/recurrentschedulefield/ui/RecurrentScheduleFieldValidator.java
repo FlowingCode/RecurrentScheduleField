@@ -1,6 +1,6 @@
 /*-
  * #%L
- * DateTimeRangePicker Add-on
+ * RecurrentScheduleField Add-on
  * %%
  * Copyright (C) 2025 Flowing Code
  * %%
@@ -17,9 +17,9 @@
  * limitations under the License.
  * #L%
  */
-package com.flowingcode.vaadin.addons.datetimerangepicker.ui;
+package com.flowingcode.vaadin.addons.recurrentschedulefield.ui;
 
-import com.flowingcode.vaadin.addons.datetimerangepicker.api.DateTimeRange;
+import com.flowingcode.vaadin.addons.recurrentschedulefield.api.DateTimeRange;
 import com.vaadin.flow.data.binder.ValidationResult;
 import com.vaadin.flow.data.binder.Validator;
 import com.vaadin.flow.data.binder.ValueContext;
@@ -29,7 +29,7 @@ import java.time.LocalTime;
 import java.util.Set;
 
 /**
- * Validator for {@link DateTimeRangePicker} component.
+ * Validator for {@link RecurrentScheduleField} component.
  * <p>
  * Ensures that the selected date and time ranges, as well as the selected weekdays,
  * are valid according to the component's rules.
@@ -37,19 +37,19 @@ import java.util.Set;
  *
  * @author Flowing Code
  */
-public class DateTimeRangePickerValidator implements Validator<DateTimeRange> {
+public class RecurrentScheduleFieldValidator implements Validator<DateTimeRange> {
 
-  private final DateTimeRangePicker model;
+  private final RecurrentScheduleField model;
 
   /**
-   * Creates a new validator for the specified {@link DateTimeRangePicker} component.
+   * Creates a new validator for the specified {@link RecurrentScheduleField} component.
    * <p>
    * Attaches manual validation to the date, time, and weekday selection fields of the picker.
    * </p>
    *
-   * @param model the {@code DateTimeRangePicker} component to validate
+   * @param model the {@code RecurrentScheduleField} component to validate
    */
-  public DateTimeRangePickerValidator(DateTimeRangePicker model) {
+  public RecurrentScheduleFieldValidator(RecurrentScheduleField model) {
       this.model = model;
       setManualValidation();
   }

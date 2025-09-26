@@ -1,10 +1,10 @@
-[![Published on Vaadin Directory](https://img.shields.io/badge/Vaadin%20Directory-published-00b4f0.svg)](https://vaadin.com/directory/component/date-time-range-picker-add-on)
-[![Stars on vaadin.com/directory](https://img.shields.io/vaadin-directory/star/date-time-range-picker-add-on.svg)](https://vaadin.com/directory/component/date-time-range-picker-add-on)
-[![Build Status](https://jenkins.flowingcode.com/job/date-time-range-picker-addon/badge/icon)](https://jenkins.flowingcode.com/job/date-time-range-picker-addon)
-[![Maven Central](https://img.shields.io/maven-central/v/com.flowingcode.vaadin.addons/date-time-range-picker-addon)](https://mvnrepository.com/artifact/com.flowingcode.vaadin.addons/date-time-range-picker-addon)
-[![Javadoc](https://img.shields.io/badge/javadoc-00b4f0)](https://javadoc.flowingcode.com/artifact/com.flowingcode.vaadin.addons/date-time-range-picker-addon)
+[![Published on Vaadin Directory](https://img.shields.io/badge/Vaadin%20Directory-published-00b4f0.svg)](https://vaadin.com/directory/component/recurrent-schedule-field-add-on)
+[![Stars on vaadin.com/directory](https://img.shields.io/vaadin-directory/star/recurrent-schedule-field-add-on.svg)](https://vaadin.com/directory/component/recurrent-schedule-field-add-on)
+[![Build Status](https://jenkins.flowingcode.com/job/recurrent-schedule-field-addon/badge/icon)](https://jenkins.flowingcode.com/job/recurrent-schedule-field-addon)
+[![Maven Central](https://img.shields.io/maven-central/v/com.flowingcode.vaadin.addons/recurrent-schedule-field-addon)](https://mvnrepository.com/artifact/com.flowingcode.vaadin.addons/recurrent-schedule-field-addon)
+[![Javadoc](https://img.shields.io/badge/javadoc-00b4f0)](https://javadoc.flowingcode.com/artifact/com.flowingcode.vaadin.addons/recurrent-schedule-field-addon)
 
-# Date Time Range Picker Add-on
+# Recurrent Schedule Field Add-on
 
 A Vaadin 24 component for creating and managing [time intervals](https://en.wikipedia.org/wiki/ISO_8601#Time_intervals) (_a time period defined by start and end points_) within defined date, time and days constraints.
 
@@ -28,11 +28,11 @@ As an example, you could define an interval to happen **every weekend** from **8
 
 ## Online demo
 
-[Online demo here](http://addonsv24.flowingcode.com/date-time-range-picker)
+[Online demo here](http://addonsv24.flowingcode.com/recurrent-schedule-field)
 
 ## Download release
 
-[Available in Vaadin Directory](https://vaadin.com/directory/component/date-time-range-picker-add-on)
+[Available in Vaadin Directory](https://vaadin.com/directory/component/recurrent-schedule-field-add-on)
 
 ### Maven install
 
@@ -41,7 +41,7 @@ Add the following dependencies in your pom.xml file:
 ```xml
 <dependency>
    <groupId>com.flowingcode.vaadin.addons</groupId>
-   <artifactId>date-time-range-picker-addon</artifactId>
+   <artifactId>recurrent-schedule-field-addon</artifactId>
    <version>X.Y.Z</version>
 </dependency>
 ```
@@ -58,7 +58,7 @@ To see the demo, navigate to http://localhost:8080/
 
 ## Release notes
 
-See [here](https://github.com/FlowingCode/DateTimeRangePicker/releases)
+See [here](https://github.com/FlowingCode/RecurrentScheduleField/releases)
 
 ## Issue tracking
 
@@ -83,17 +83,17 @@ Then, follow these steps for creating a contribution:
 
 This add-on is distributed under Apache License 2.0. For license terms, see LICENSE.txt.
 
-Date Time Range Picker Add-on is written by Flowing Code S.A.
+Recurrent Schedule Field Add-on is written by Flowing Code S.A.
 
 # Developer Guide
 
 ## Getting started
 
 ``` java
-    DateTimeRangePicker addon = new DateTimeRangePicker();    (1)
-    addon.setMinDate(LocalDate.now());                        (2)
-    addon.setMaxDate(LocalDate.now().plusDays(15));           (2)
-    addon.setWeekDays(DayOfWeek.MONDAY, DayOfWeek.FRIDAY);    (3)
+    RecurrentScheduleField field = new RecurrentScheduleField();    (1)
+    field.setMinDate(LocalDate.now());                              (2)
+    field.setMaxDate(LocalDate.now().plusDays(15));                 (2)
+    field.setWeekDays(DayOfWeek.MONDAY, DayOfWeek.FRIDAY);          (3)
 ```
 - (1) Instantiation. 
 - (2) Only dates between **today** and **fifteen** days later can be selected. Keep in mind that both date and time ends are exclusive.
@@ -104,13 +104,13 @@ Date Time Range Picker Add-on is written by Flowing Code S.A.
 The component leverages a ``DateTimeRange`` class to represent the selected date and time range.
 
 ``` java
-    DateTimeRangePicker addon = new DateTimeRangePicker();                        
+    RecurrentScheduleField field = new RecurrentScheduleField();                        
     Binder<Pojo> binder = new Binder<>(Pojo.class);                                 (1)
-    binder.forField(addon).bind(Pojo::getDateTimeRange, Pojo::setDateTimeRange);    (2) 
+    binder.forField(field).bind(Pojo::getDateTimeRange, Pojo::setDateTimeRange);    (2) 
     binder.setBean(pojo);                                                           (3)
 ```
  - (1) The ``Pojo`` class is bound using its getter and setter methods (2).
- - (2) The ``DateTimeRangePicker`` is bound.
+ - (2) The ``RecurrentScheduleField`` is bound.
  - (3) The ``DateTimeRange`` instance is updated from/on the ``Pojo`` class.
 
 
@@ -131,17 +131,16 @@ You can also call a single ``TimeInterval`` instance directly.
 
 ## I18n support
 
-Customize a ``DateTimeRangePickerI18n`` instance and pass it to the component (1).
+Customize a ``RecurrentScheduleFieldI18n`` instance and pass it to the component (1).
 
 ``` java
-    DateTimeRangePicker addon = new DateTimeRangePicker();
-    addon.setI18n(new DateTimeRangePickerI18n()                 (1)
+    RecurrentScheduleField field = new RecurrentScheduleField();
+    field.setI18n(new RecurrentScheduleFieldI18n()                 (1)
         .setDatesTitle("Your custom title")
         .setTimeChipsText("AM", "PM", "AM + PM")
         .setTimesPlaceholder("Start time", "End time")
     );
 ```
-
 
 ## Special configuration when using Spring
 

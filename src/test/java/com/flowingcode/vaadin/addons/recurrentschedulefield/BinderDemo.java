@@ -1,6 +1,6 @@
 /*-
  * #%L
- * DateTimeRangePicker Add-on
+ * RecurrentScheduleField Add-on
  * %%
  * Copyright (C) 2025 Flowing Code
  * %%
@@ -17,12 +17,12 @@
  * limitations under the License.
  * #L%
  */
-package com.flowingcode.vaadin.addons.datetimerangepicker;
+package com.flowingcode.vaadin.addons.recurrentschedulefield;
 
 import com.flowingcode.vaadin.addons.demo.DemoSource;
-import com.flowingcode.vaadin.addons.datetimerangepicker.api.DateTimeRange;
-import com.flowingcode.vaadin.addons.datetimerangepicker.api.TimeInterval;
-import com.flowingcode.vaadin.addons.datetimerangepicker.ui.DateTimeRangePicker;
+import com.flowingcode.vaadin.addons.recurrentschedulefield.api.DateTimeRange;
+import com.flowingcode.vaadin.addons.recurrentschedulefield.api.TimeInterval;
+import com.flowingcode.vaadin.addons.recurrentschedulefield.ui.RecurrentScheduleField;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.dataview.GridListDataView;
@@ -42,7 +42,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @PageTitle("Binding")
-@Route(value = "datetimerange/binder", layout = DateTimeRangePickerTabbedView.class)
+@Route(value = "recurrent-schedule-field/binder", layout = RecurrentScheduleFieldDemoView.class)
 @DemoSource
 public class BinderDemo extends VerticalLayout {
 
@@ -56,7 +56,7 @@ public class BinderDemo extends VerticalLayout {
   private GridListDataView<TimeInterval> dataView = null;
 
   /*
-    DateTimeRangePicker will return a DateTimeRange instance when valid.
+    RecurrentScheduleField will return a DateTimeRange instance when valid.
     Then you may use that object to operate TimeInterval instances.
     TimeInterval represents a time interval (ISO 8601), defined by start and end points.
   */
@@ -65,16 +65,16 @@ public class BinderDemo extends VerticalLayout {
     addClassNames(AlignItems.CENTER);
 
     // Basic component creation
-    DateTimeRangePicker addon = new DateTimeRangePicker();
+    RecurrentScheduleField field = new RecurrentScheduleField();
     // Distance between start and end dates is at most 30 days
-    addon.setMaxDaysSpan(30);
+    field.setMaxDaysSpan(30);
 
     // An object with simple getter/setter methods
     Pojo pojo = new Pojo();
 
     // Bind the object with the component
     Binder<Pojo> binder = new Binder<>(Pojo.class);
-    binder.forField(addon)
+    binder.forField(field)
         .bind(Pojo::getDateTimeRange, Pojo::setDateTimeRange);
     binder.setBean(pojo);
 
@@ -153,7 +153,7 @@ public class BinderDemo extends VerticalLayout {
     buttonLayout.setAlignItems(Alignment.CENTER);
     buttonLayout.add(dateButton, daysButton, timeButton);
 
-    add(addon, buttonLayout, intervalButton, grid);
+    add(field, buttonLayout, intervalButton, grid);
   }
 
   private static class Pojo {

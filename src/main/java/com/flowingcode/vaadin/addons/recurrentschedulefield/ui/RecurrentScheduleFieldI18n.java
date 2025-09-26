@@ -1,6 +1,6 @@
 /*-
  * #%L
- * DateTimeRangePicker Add-on
+ * RecurrentScheduleField Add-on
  * %%
  * Copyright (C) 2025 Flowing Code
  * %%
@@ -17,7 +17,7 @@
  * limitations under the License.
  * #L%
  */
-package com.flowingcode.vaadin.addons.datetimerangepicker.ui;
+package com.flowingcode.vaadin.addons.recurrentschedulefield.ui;
 
 import com.vaadin.flow.function.SerializableRunnable;
 import java.io.Serializable;
@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Provides internationalization support for {@link DateTimeRangePicker}.
+ * Provides internationalization support for {@link RecurrentScheduleField}.
  *
  * <h5>Features:</h5>
  * <ul>
@@ -38,14 +38,14 @@ import java.util.Map;
  * </ul>
  *
  * @author Flowing Code
- * @see DateTimeRangePicker
+ * @see RecurrentScheduleField
  */
-public class DateTimeRangePickerI18n implements Serializable {
+public class RecurrentScheduleFieldI18n implements Serializable {
 
-  private DateTimeRangePicker component;
+  private RecurrentScheduleField component;
   private final Map<String, SerializableRunnable> actions = new HashMap<>();
 
-  void attachComponent(DateTimeRangePicker component) {
+  void attachComponent(RecurrentScheduleField component) {
     this.component = component;
   }
 
@@ -65,7 +65,7 @@ public class DateTimeRangePickerI18n implements Serializable {
    *
    * @param text   title for the pickers
    */
-  public DateTimeRangePickerI18n setDatesTitle(String text) {
+  public RecurrentScheduleFieldI18n setDatesTitle(String text) {
     addAction(() -> component.getDatesTitle().setText(text), "setDatesTitle");
     return this;
   }
@@ -73,7 +73,7 @@ public class DateTimeRangePickerI18n implements Serializable {
   /**
    * Gets current date pickers' title.
    *
-   * @return date pickers' title or {@code null} if this object is not attached to a {@code DateTimeRangePicker} instance
+   * @return date pickers' title or {@code null} if this object is not attached to a {@code RecurrentScheduleField} instance
    */
   public String getDatesTitle() {
     return component != null ? component.getDatesTitle().getText() : null;
@@ -84,7 +84,7 @@ public class DateTimeRangePickerI18n implements Serializable {
    *
    * @param text   title for the days picker
    */
-  public DateTimeRangePickerI18n setDaysTitle(String text) {
+  public RecurrentScheduleFieldI18n setDaysTitle(String text) {
     addAction(() -> component.getDaysTitle().setText(text), "setDaysTitle");
     return this;
   }
@@ -92,7 +92,7 @@ public class DateTimeRangePickerI18n implements Serializable {
   /**
    * Gets current days picker's title.
    *
-   * @return days picker's title or {@code null} if this object is not attached to a {@code DateTimeRangePicker} instance
+   * @return days picker's title or {@code null} if this object is not attached to a {@code RecurrentScheduleField} instance
    */
   public String getDaysTitle() {
     return component != null ? component.getDaysTitle().getText() : null;
@@ -103,7 +103,7 @@ public class DateTimeRangePickerI18n implements Serializable {
    *
    * @param text   title for the pickers
    */
-  public DateTimeRangePickerI18n setTimesTitle(String text) {
+  public RecurrentScheduleFieldI18n setTimesTitle(String text) {
     addAction(() -> component.getTimesTitle().setText(text), "setTimesTitle");
     return this;
   }
@@ -111,7 +111,7 @@ public class DateTimeRangePickerI18n implements Serializable {
   /**
    * Gets current time pickers' title.
    *
-   * @return time pickers' title or {@code null} if this object is not attached to a {@code DateTimeRangePicker} instance
+   * @return time pickers' title or {@code null} if this object is not attached to a {@code RecurrentScheduleField} instance
    */
   public String getTimesTitle() {
     return component != null ? component.getTimesTitle().getText() : null;
@@ -123,7 +123,7 @@ public class DateTimeRangePickerI18n implements Serializable {
    * @param startTime   placeholder for the start-time picker
    * @param endTime     placeholder for the end-time picker
    */
-  public DateTimeRangePickerI18n setTimesPlaceholder(String startTime, String endTime) {
+  public RecurrentScheduleFieldI18n setTimesPlaceholder(String startTime, String endTime) {
     addAction(() -> {
       component.getStartTimePicker().setPlaceholder(startTime);
       component.getEndTimePicker().setPlaceholder(endTime);
@@ -136,7 +136,7 @@ public class DateTimeRangePickerI18n implements Serializable {
    *
    * @return
    * a list where the first element corresponds to the start-time picker's placeholder and the second to the end-time picker's placeholder
-   * <br><br>{@code null} if this object is not attached to a {@code DateTimeRangePicker} instance
+   * <br><br>{@code null} if this object is not attached to a {@code RecurrentScheduleField} instance
    */
   public List<String> getTimesPlaceholder() {
     return component != null ? List.of(
@@ -151,7 +151,7 @@ public class DateTimeRangePickerI18n implements Serializable {
    * @param startDate   placeholder for the start-date picker
    * @param endDate     placeholder for the end-date picker
    */
-  public DateTimeRangePickerI18n setDatesPlaceholder(String startDate, String endDate) {
+  public RecurrentScheduleFieldI18n setDatesPlaceholder(String startDate, String endDate) {
     addAction(() -> {
       component.getStartDatePicker().setPlaceholder(startDate);
       component.getEndDatePicker().setPlaceholder(endDate);
@@ -164,7 +164,7 @@ public class DateTimeRangePickerI18n implements Serializable {
    *
    * @return
    * a list where the first element corresponds to the start-date picker's placeholder and the second to the end-date picker's placeholder
-   * <br><br>{@code null} if this object is not attached to a {@code DateTimeRangePicker} instance
+   * <br><br>{@code null} if this object is not attached to a {@code RecurrentScheduleField} instance
    */
   public List<String> getDatesPlaceholder() {
     return component != null ? List.of(
@@ -178,9 +178,9 @@ public class DateTimeRangePickerI18n implements Serializable {
    *
    * @param initials   a list of initials for the 7 days of the week
    *                   <br>The order of each depends on the order set on the picker
-   * @see DateTimeRangePicker#setFirstWeekDay(DayOfWeek)
+   * @see RecurrentScheduleField#setFirstWeekDay(DayOfWeek)
    */
-  public DateTimeRangePickerI18n setDayInitials(List<String> initials) {
+  public RecurrentScheduleFieldI18n setDayInitials(List<String> initials) {
     if (initials == null || initials.size() != 7) {
       throw new IllegalArgumentException("Exactly 7 day initials are required");
     }
@@ -196,8 +196,8 @@ public class DateTimeRangePickerI18n implements Serializable {
    *
    * @return
    * a list of initials for the 7 days of the week. The order of each depends on the order set on the picker
-   * <br><br>{@code null} if this object is not attached to a {@code DateTimeRangePicker} instance
-   * @see DateTimeRangePicker#setFirstWeekDay(DayOfWeek)
+   * <br><br>{@code null} if this object is not attached to a {@code RecurrentScheduleField} instance
+   * @see RecurrentScheduleField#setFirstWeekDay(DayOfWeek)
    */
   public List<String> getDayInitials() {
     return component != null ? component.getDaysInitials() : null;
@@ -210,7 +210,7 @@ public class DateTimeRangePickerI18n implements Serializable {
    * @param afternoon     text for the afternoon-only chip
    * @param all           text for the all-day chip
    */
-  public DateTimeRangePickerI18n setTimeChipsText(String morning, String afternoon, String all) {
+  public RecurrentScheduleFieldI18n setTimeChipsText(String morning, String afternoon, String all) {
     addAction(() -> {
       component.getMorningChip().setText(morning);
       component.getAfterNoonChip().setText(afternoon);
@@ -226,7 +226,7 @@ public class DateTimeRangePickerI18n implements Serializable {
    * a list where the first element corresponds to the morning-only chip's text,
    * the second to the afternoon-only chip's text and the third to the all-day chip's text
    *
-   * <br><br>{@code null} if this object is not attached to a {@code DateTimeRangePicker} instance
+   * <br><br>{@code null} if this object is not attached to a {@code RecurrentScheduleField} instance
    */
   public List<String> getTimeChipsText() {
     return component != null ? List.of(
@@ -243,7 +243,7 @@ public class DateTimeRangePickerI18n implements Serializable {
    * @param weekend       text for the weekends-only chip
    * @param all           text for the all days chip
    */
-  public DateTimeRangePickerI18n setDaysChipsText(String weekend, String weekdays, String all) {
+  public RecurrentScheduleFieldI18n setDaysChipsText(String weekend, String weekdays, String all) {
     addAction(() -> {
       component.getWeekdaysChip().setText(weekdays);
       component.getWeekendChip().setText(weekend);
@@ -259,7 +259,7 @@ public class DateTimeRangePickerI18n implements Serializable {
    * a list where the first element corresponds to the monday-to-friday chip's text,
    * the second to the weekends-only chip's text and the third to the all-days chip's text
    *
-   * <br><br>{@code null} if this object is not attached to a {@code DateTimeRangePicker} instance
+   * <br><br>{@code null} if this object is not attached to a {@code RecurrentScheduleField} instance
    */
   public List<String> getDaysChipsText() {
     return component != null ? List.of(

@@ -1,6 +1,6 @@
 /*-
  * #%L
- * DateTimeRangePicker Add-on
+ * RecurrentScheduleField Add-on
  * %%
  * Copyright (C) 2025 Flowing Code
  * %%
@@ -17,7 +17,7 @@
  * limitations under the License.
  * #L%
  */
-package com.flowingcode.vaadin.addons.datetimerangepicker.api;
+package com.flowingcode.vaadin.addons.recurrentschedulefield.api;
 
 import static java.time.temporal.ChronoUnit.DAYS;
 

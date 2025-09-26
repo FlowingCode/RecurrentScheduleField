@@ -1,6 +1,6 @@
 /*-
  * #%L
- * DateTimeRangePicker Add-on
+ * RecurrentScheduleField Add-on
  * %%
  * Copyright (C) 2025 Flowing Code
  * %%
@@ -17,14 +17,16 @@
  * limitations under the License.
  * #L%
  */
-package com.flowingcode.vaadin.addons.datetimerangepicker.ui;
+package com.flowingcode.vaadin.addons.recurrentschedulefield.ui;
+
+import java.util.HashSet;
+import java.util.Set;
 
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import com.vaadin.flow.dom.Style.Visibility;
 import com.vaadin.flow.function.SerializableConsumer;
 import com.vaadin.flow.theme.lumo.LumoUtility.AlignItems;
 import com.vaadin.flow.theme.lumo.LumoUtility.Border;
@@ -43,15 +45,13 @@ import com.vaadin.flow.theme.lumo.LumoUtility.Padding.Horizontal;
 import com.vaadin.flow.theme.lumo.LumoUtility.Padding.Left;
 import com.vaadin.flow.theme.lumo.LumoUtility.Padding.Vertical;
 import com.vaadin.flow.theme.lumo.LumoUtility.TextColor;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * A UI component representing a group of single-selection chips.
  * The group can be set to read-only mode, disabling user interaction.
- * This component is styled using the "fc-dtrp" and Lumo classes.
+ * This component is styled using the "fc-rsf" and Lumo classes.
  */
-@CssImport("./styles/fc-date-time-range-picker.css")
+@CssImport("./styles/fc-recurrent-schedule-field.css")
 class ChipGroup extends HorizontalLayout {
 
   private final Set<Chip> chips = new HashSet<>();
@@ -134,7 +134,7 @@ class ChipGroup extends HorizontalLayout {
       addClassNames(
           Horizontal.MEDIUM,
           Vertical.XSMALL,
-          "fc-dtrp-hoverable",
+          "fc-rsf-hoverable",
           AlignItems.CENTER,
           BorderRadius.LARGE,
           Border.ALL,
@@ -172,12 +172,12 @@ class ChipGroup extends HorizontalLayout {
     // Switches UI to given state
     private void toggle(Boolean isChecked) {
       if (isChecked) {
-        removeClassName("fc-dtrp-unselected");
-        addClassName("fc-dtrp-selected");
+        removeClassName("fc-rsf-unselected");
+        addClassName("fc-rsf-selected");
         addComponentAsFirst(checkIcon);
       } else {
-        removeClassName("fc-dtrp-selected");
-        addClassName("fc-dtrp-unselected");
+        removeClassName("fc-rsf-selected");
+        addClassName("fc-rsf-unselected");
         remove(checkIcon);
       }
       this.checked = isChecked;
@@ -212,14 +212,14 @@ class ChipGroup extends HorizontalLayout {
       this.readOnly = readOnly;
 
       if (readOnly) {
-        removeClassName("fc-dtrp-hoverable");
+        removeClassName("fc-rsf-hoverable");
         removeClassName(TextColor.BODY);
         addClassName(TextColor.SECONDARY);
-        addClassName("fc-dtrp-readonly");
+        addClassName("fc-rsf-readonly");
       } else {
-        removeClassName("fc-dtrp-readonly");
+        removeClassName("fc-rsf-readonly");
         removeClassName(TextColor.SECONDARY);
-        addClassName("fc-dtrp-hoverable");
+        addClassName("fc-rsf-hoverable");
         addClassName(TextColor.BODY);
       }
     }

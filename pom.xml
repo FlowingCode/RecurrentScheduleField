@@ -5,9 +5,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.flowingcode.vaadin.addons</groupId>
-    <artifactId>date-time-range-picker-addon</artifactId>
+    <artifactId>recurrent-schedule-field-addon</artifactId>
     <version>1.0.0-SNAPSHOT</version>
-    <name>Date Time Range Picker Add-on</name>
+    <name>Recurrent Schedule Field Add-on</name>
     <description>Component that facilitates the selection of a date and time range</description>
     <url>https://www.flowingcode.com/en/open-source/</url>
 
@@ -38,9 +38,9 @@
     </licenses>
 
     <scm>
-        <url>https://github.com/FlowingCode/DateTimeRangePicker</url>
-        <connection>scm:git:git://github.com/FlowingCode/DateTimeRangePicker.git</connection>
-        <developerConnection>scm:git:ssh://git@github.com:/FlowingCode/DateTimeRangePicker.git</developerConnection>
+        <url>https://github.com/FlowingCode/RecurrentScheduleField</url>
+        <connection>scm:git:git://github.com/FlowingCode/RecurrentScheduleField.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com:/FlowingCode/RecurrentScheduleField.git</developerConnection>
         <tag>master</tag>
     </scm>
 

@@ -1,6 +1,6 @@
 /*-
  * #%L
- * DateTimeRangePicker Add-on
+ * RecurrentScheduleField Add-on
  * %%
  * Copyright (C) 2025 Flowing Code
  * %%
@@ -17,14 +17,14 @@
  * limitations under the License.
  * #L%
  */
-package com.flowingcode.vaadin.addons.datetimerangepicker.ui;
+package com.flowingcode.vaadin.addons.recurrentschedulefield.ui;
 
 import com.vaadin.flow.component.html.Div;
 
 /**
  * A simple UI component representing a circular indicator.
  * The circle's background color can be customized using the {@link #setColor(String)} method.
- * This component is styled with the "fc-dtrp-circle" CSS class.
+ * This component is styled with the "fc-rsf-circle" CSS class.
  */
 class Circle extends Div {
 
@@ -36,7 +36,7 @@ class Circle extends Div {
   public Circle() {
     circle = new Div();
 
-    addClassName("fc-dtrp-circle");
+    addClassName("fc-rsf-circle");
 
     add(circle);
   }

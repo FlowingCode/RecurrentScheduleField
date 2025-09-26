@@ -1,6 +1,6 @@
 /*-
  * #%L
- * DateTimeRangePicker Add-on
+ * RecurrentScheduleField Add-on
  * %%
  * Copyright (C) 2025 Flowing Code
  * %%
@@ -17,9 +17,8 @@
  * limitations under the License.
  * #L%
  */
-package com.flowingcode.vaadin.addons.datetimerangepicker.test;
+package com.flowingcode.vaadin.addons.recurrentschedulefield.test;
 
-import com.flowingcode.vaadin.addons.datetimerangepicker.ui.DateTimeRangePicker;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -27,6 +26,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import org.junit.Assert;
 import org.junit.Test;
+
+import com.flowingcode.vaadin.addons.recurrentschedulefield.ui.RecurrentScheduleField;
 
 public class SerializationTest {
 
@@ -44,7 +45,7 @@ public class SerializationTest {
   @Test
   public void testSerialization() {
     try {
-      testSerializationOf(new DateTimeRangePicker());
+      testSerializationOf(new RecurrentScheduleField());
     } catch (Exception e) {
       Assert.fail("Problem while testing serialization: " + e.getMessage());
     }

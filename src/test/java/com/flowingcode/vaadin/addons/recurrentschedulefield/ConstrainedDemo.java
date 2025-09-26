@@ -1,6 +1,6 @@
 /*-
  * #%L
- * DateTimeRangePicker Add-on
+ * RecurrentScheduleField Add-on
  * %%
  * Copyright (C) 2025 Flowing Code
  * %%
@@ -17,10 +17,10 @@
  * limitations under the License.
  * #L%
  */
-package com.flowingcode.vaadin.addons.datetimerangepicker;
+package com.flowingcode.vaadin.addons.recurrentschedulefield;
 
 import com.flowingcode.vaadin.addons.demo.DemoSource;
-import com.flowingcode.vaadin.addons.datetimerangepicker.ui.DateTimeRangePicker;
+import com.flowingcode.vaadin.addons.recurrentschedulefield.ui.RecurrentScheduleField;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
@@ -31,7 +31,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 @PageTitle("Constrained")
-@Route(value = "datetimerange/constrained", layout = DateTimeRangePickerTabbedView.class)
+@Route(value = "recurrent-schedule-field/constrained", layout = RecurrentScheduleFieldDemoView.class)
 @DemoSource
 public class ConstrainedDemo extends VerticalLayout {
 
@@ -40,24 +40,24 @@ public class ConstrainedDemo extends VerticalLayout {
     addClassNames(AlignItems.CENTER);
 
     // Basic component creation
-    DateTimeRangePicker addon = new DateTimeRangePicker();
+    RecurrentScheduleField field = new RecurrentScheduleField();
     // Min selectable date
-    addon.setMinDate(LocalDate.now());
+    field.setMinDate(LocalDate.now());
     // Max selectable date
-    addon.setMaxDate(LocalDate.now().plusDays(15));
+    field.setMaxDate(LocalDate.now().plusDays(15));
     // Select days of the week programmatically
-    addon.setWeekDays(DayOfWeek.MONDAY, DayOfWeek.FRIDAY);
+    field.setWeekDays(DayOfWeek.MONDAY, DayOfWeek.FRIDAY);
     // Days will be unmodifiable
-    addon.setDaysReadOnly(true);
+    field.setDaysReadOnly(true);
     // Interval between selectable time items
     // Only times at 15-minute steps will be shown as options
-    addon.setTimeStep(Duration.ofMinutes(15));
+    field.setTimeStep(Duration.ofMinutes(15));
     // Min selectable time
-    addon.setMinTime(LocalTime.of(13, 30));
+    field.setMinTime(LocalTime.of(13, 30));
     // Max selectable time
     // Both options will constraint the chips as well
-    addon.setMaxTime(LocalTime.of(20, 0));
+    field.setMaxTime(LocalTime.of(20, 0));
 
-    add(addon);
+    add(field);
   }
 }
