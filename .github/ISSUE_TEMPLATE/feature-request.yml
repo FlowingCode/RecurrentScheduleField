@@ -1,5 +1,5 @@
 name: Feature Request
-description: Please add feature suggestions related to Date Time Range Picker Add-on here.
+description: Please add feature suggestions related to Recurrent Schedule Field Add-on here.
 body:
   - type: textarea
     id: feature-proposal
