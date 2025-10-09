@@ -19,6 +19,12 @@
  */
 package com.flowingcode.vaadin.addons.recurrentschedulefield;
 
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.flowingcode.vaadin.addons.demo.DemoSource;
 import com.flowingcode.vaadin.addons.recurrentschedulefield.api.DateTimeRange;
 import com.flowingcode.vaadin.addons.recurrentschedulefield.api.TimeInterval;
@@ -33,13 +39,6 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.theme.lumo.LumoUtility.AlignItems;
-import com.vaadin.flow.theme.lumo.LumoUtility.Margin.Horizontal;
-import java.time.Duration;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @PageTitle("Binding")
 @Route(value = "recurrent-schedule-field/binder", layout = RecurrentScheduleFieldDemoView.class)
@@ -62,7 +61,6 @@ public class BinderDemo extends VerticalLayout {
   */
   public BinderDemo() {
     setSizeFull();
-    addClassNames(AlignItems.CENTER);
 
     // Basic component creation
     RecurrentScheduleField field = new RecurrentScheduleField();
@@ -147,7 +145,7 @@ public class BinderDemo extends VerticalLayout {
 
     dataView.addItemCountChangeListener(c -> firstCol.setFooter("Total: " + c.getItemCount()));
     grid.setWidth("75%");
-    grid.addClassName(Horizontal.AUTO);
+    // grid.addClassName(Horizontal.AUTO);
 
     HorizontalLayout buttonLayout = new HorizontalLayout();
     buttonLayout.setAlignItems(Alignment.CENTER);

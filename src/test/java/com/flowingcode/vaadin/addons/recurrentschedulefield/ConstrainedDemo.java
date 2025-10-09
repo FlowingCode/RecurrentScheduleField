@@ -24,7 +24,6 @@ import com.flowingcode.vaadin.addons.recurrentschedulefield.ui.RecurrentSchedule
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.theme.lumo.LumoUtility.AlignItems;
 import java.time.DayOfWeek;
 import java.time.Duration;
 import java.time.LocalDate;
@@ -37,7 +36,6 @@ public class ConstrainedDemo extends VerticalLayout {
 
   public ConstrainedDemo() {
     setSizeFull();
-    addClassNames(AlignItems.CENTER);
 
     // Basic component creation
     RecurrentScheduleField field = new RecurrentScheduleField();

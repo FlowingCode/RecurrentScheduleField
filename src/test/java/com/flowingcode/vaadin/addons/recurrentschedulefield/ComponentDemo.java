@@ -24,7 +24,6 @@ import com.flowingcode.vaadin.addons.recurrentschedulefield.ui.RecurrentSchedule
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.theme.lumo.LumoUtility.AlignItems;
 
 @PageTitle("Basic")
 @Route(value = "recurrent-schedule-field/basic", layout = RecurrentScheduleFieldDemoView.class)
@@ -33,8 +32,7 @@ public class ComponentDemo extends VerticalLayout {
 
   public ComponentDemo() {
     setSizeFull();
-    addClassNames(AlignItems.CENTER);
-
+    
     // Basic component creation
     RecurrentScheduleField field = new RecurrentScheduleField();
     add(field);

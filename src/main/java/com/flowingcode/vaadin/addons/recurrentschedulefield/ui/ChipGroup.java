@@ -22,36 +22,16 @@ package com.flowingcode.vaadin.addons.recurrentschedulefield.ui;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.function.SerializableConsumer;
-import com.vaadin.flow.theme.lumo.LumoUtility.AlignItems;
-import com.vaadin.flow.theme.lumo.LumoUtility.Border;
-import com.vaadin.flow.theme.lumo.LumoUtility.BorderColor;
-import com.vaadin.flow.theme.lumo.LumoUtility.BorderRadius;
-import com.vaadin.flow.theme.lumo.LumoUtility.Display;
-import com.vaadin.flow.theme.lumo.LumoUtility.FlexWrap;
-import com.vaadin.flow.theme.lumo.LumoUtility.FontSize;
-import com.vaadin.flow.theme.lumo.LumoUtility.FontWeight;
-import com.vaadin.flow.theme.lumo.LumoUtility.Gap;
-import com.vaadin.flow.theme.lumo.LumoUtility.JustifyContent;
-import com.vaadin.flow.theme.lumo.LumoUtility.LineHeight;
-import com.vaadin.flow.theme.lumo.LumoUtility.Margin;
-import com.vaadin.flow.theme.lumo.LumoUtility.Padding;
-import com.vaadin.flow.theme.lumo.LumoUtility.Padding.Horizontal;
-import com.vaadin.flow.theme.lumo.LumoUtility.Padding.Left;
-import com.vaadin.flow.theme.lumo.LumoUtility.Padding.Vertical;
-import com.vaadin.flow.theme.lumo.LumoUtility.TextColor;
 
 /**
  * A UI component representing a group of single-selection chips.
  * The group can be set to read-only mode, disabling user interaction.
- * This component is styled using the "fc-rsf" and Lumo classes.
  */
-@CssImport("./styles/fc-recurrent-schedule-field.css")
 class ChipGroup extends HorizontalLayout {
 
   private final Set<Chip> chips = new HashSet<>();
@@ -63,14 +43,7 @@ class ChipGroup extends HorizontalLayout {
    * Chips can be added later using {@link #addChip(Chip)}.
    */
   public ChipGroup() {
-    addClassNames(
-        AlignItems.CENTER,
-        JustifyContent.END,
-        Gap.SMALL,
-        FlexWrap.WRAP,
-        Left.SMALL,
-        Vertical.SMALL
-    );
+    addClassName("fc-rsf-chip-group");
   }
 
   /**
@@ -131,28 +104,12 @@ class ChipGroup extends HorizontalLayout {
      * The chip is initially unchecked and not read-only.
      */
     public Chip() {
-      addClassNames(
-          Horizontal.MEDIUM,
-          Vertical.XSMALL,
-          "fc-rsf-hoverable",
-          AlignItems.CENTER,
-          BorderRadius.LARGE,
-          Border.ALL,
-          BorderColor.CONTRAST_10,
-          Display.INLINE_FLEX,
-          Gap.SMALL
-      );
+      addClassNames("fc-rsf-chip", "fc-rsf-hoverable");
       checkIcon = VaadinIcon.CHECK.create();
       checkIcon.setSize("14px");
 
       textField = new Span();
-      textField.addClassNames(
-          FontSize.SMALL,
-          FontWeight.SEMIBOLD,
-          Margin.NONE,
-          Padding.NONE,
-          LineHeight.SMALL
-      );
+      textField.addClassName("fc-rsf-chip-text");
 
       addClickListener(ev -> {
         if (!readOnly) {
@@ -213,14 +170,14 @@ class ChipGroup extends HorizontalLayout {
 
       if (readOnly) {
         removeClassName("fc-rsf-hoverable");
-        removeClassName(TextColor.BODY);
-        addClassName(TextColor.SECONDARY);
+        removeClassName("fc-rsf-chip-text-color");
+        addClassName("fc-rsf-chip-text-color-readonly");
         addClassName("fc-rsf-readonly");
       } else {
         removeClassName("fc-rsf-readonly");
-        removeClassName(TextColor.SECONDARY);
+        removeClassName("fc-rsf-chip-text-color-readonly");
         addClassName("fc-rsf-hoverable");
-        addClassName(TextColor.BODY);
+        addClassName("fc-rsf-chip-text-color");
       }
     }
 

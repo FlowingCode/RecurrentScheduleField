@@ -35,6 +35,5 @@ public class RecurrentScheduleFieldDemoView extends TabbedDemo {
     addDemo(BinderDemo.class);
     addDemo(StatesDemo.class);
     addDemo(ConstrainedDemo.class);
-    setSizeFull();
   }
 }
