@@ -19,6 +19,14 @@
  */
 package com.flowingcode.vaadin.addons.recurrentschedulefield.ui;
 
+import java.time.DayOfWeek;
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.List;
+import java.util.Locale;
+import java.util.Set;
+
 import com.flowingcode.vaadin.addons.dayofweekselector.DayOfWeekSelector;
 import com.flowingcode.vaadin.addons.recurrentschedulefield.api.DateTimeRange;
 import com.flowingcode.vaadin.addons.recurrentschedulefield.api.TimeInterval;
@@ -26,6 +34,7 @@ import com.flowingcode.vaadin.addons.recurrentschedulefield.ui.ChipGroup.Chip;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.customfield.CustomField;
 import com.vaadin.flow.component.datepicker.DatePicker;
+import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H5;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -34,25 +43,6 @@ import com.vaadin.flow.component.timepicker.TimePicker;
 import com.vaadin.flow.data.binder.HasValidator;
 import com.vaadin.flow.data.binder.Validator;
 import com.vaadin.flow.function.SerializableRunnable;
-import com.vaadin.flow.theme.lumo.LumoUtility.AlignItems;
-import com.vaadin.flow.theme.lumo.LumoUtility.AlignSelf;
-import com.vaadin.flow.theme.lumo.LumoUtility.Display;
-import com.vaadin.flow.theme.lumo.LumoUtility.Flex;
-import com.vaadin.flow.theme.lumo.LumoUtility.Gap;
-import com.vaadin.flow.theme.lumo.LumoUtility.Height;
-import com.vaadin.flow.theme.lumo.LumoUtility.JustifyContent;
-import com.vaadin.flow.theme.lumo.LumoUtility.Margin;
-import com.vaadin.flow.theme.lumo.LumoUtility.Padding;
-import com.vaadin.flow.theme.lumo.LumoUtility.Padding.Bottom;
-import com.vaadin.flow.theme.lumo.LumoUtility.Position;
-import com.vaadin.flow.theme.lumo.LumoUtility.Width;
-import java.time.DayOfWeek;
-import java.time.Duration;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.List;
-import java.util.Locale;
-import java.util.Set;
 
 /**
  * A component to generate {@link TimeInterval} instances by customizing a {@link DateTimeRange}.
@@ -71,6 +61,7 @@ import java.util.Set;
  * @author Flowing Code
  * @see DateTimeRange
  */
+@CssImport("./styles/fc-recurrent-schedule-field.css")
 public class RecurrentScheduleField
     extends CustomField<DateTimeRange> implements HasValidator<DateTimeRange> {
 
@@ -155,21 +146,11 @@ public class RecurrentScheduleField
   }
 
   private void setUI() {
-    addClassNames(
-        Width.AUTO,
-        Display.INLINE,
-        Margin.NONE,
-        Padding.SMALL
-    );
+    addClassName("fc-recurrent-schedule-field");
 
     final HorizontalLayout rootLayout = new HorizontalLayout();
-    rootLayout.addClassNames(
-        Padding.SMALL,
-        Width.FULL,
-        Height.FULL,
-        AlignItems.STRETCH,
-        Gap.MEDIUM
-    );
+    rootLayout.setSizeFull();
+    rootLayout.addClassName("fc-recurrent-schedule-field-root-layout");
 
     final VerticalLayout mainLayout = new VerticalLayout();
     dateSelector = getDateSelectors();
@@ -183,13 +164,7 @@ public class RecurrentScheduleField
     verticalLine.setMinHeight("100%");
     verticalLine.setMaxHeight("100%");
 
-    mainLayout.addClassNames(
-        Gap.MEDIUM,
-        Display.INLINE_FLEX,
-        AlignItems.STRETCH,
-        Padding.NONE,
-        Flex.GROW
-    );
+    mainLayout.addClassName("fc-recurrent-schedule-field-main-layout");
 
     validator = new RecurrentScheduleFieldValidator(this);
 
@@ -215,16 +190,10 @@ public class RecurrentScheduleField
 
   private Component getDateSelectors() {
     VerticalLayout layout = new VerticalLayout();
-    layout.addClassNames(Gap.SMALL, Padding.NONE, Gap.XSMALL);
+    layout.addClassName("fc-date-selector-layout");
 
     Div headerWrapper = new Div();
-    headerWrapper.addClassNames(
-        Display.FLEX,
-        AlignItems.CENTER,
-        Gap.SMALL,
-        Position.RELATIVE, // Required for the circle
-        Bottom.SMALL
-    );
+    headerWrapper.addClassName("fc-date-selector-header-wrapper");
 
     datesTitle = new H5();
 
@@ -255,7 +224,7 @@ public class RecurrentScheduleField
     daysDivider = new SpanLine();
 
     HorizontalLayout selectorLayout = new HorizontalLayout();
-    selectorLayout.addClassNames(Gap.SMALL);
+    selectorLayout.addClassName("fc-date-selector-selector-layout");
     selectorLayout.add(startDatePicker, daysDivider, endDatePicker);
 
     layout.add(headerWrapper, selectorLayout);
@@ -265,16 +234,12 @@ public class RecurrentScheduleField
 
   private Component getDaysSelector() {
     VerticalLayout layout = new VerticalLayout();
-    layout.addClassNames(AlignItems.STRETCH, Bottom.NONE, Padding.NONE, Gap.XSMALL);
+    layout.addClassName("fc-days-selector-layout");
 
     daysTitle = new H5();
 
     HorizontalLayout headerLayout = new HorizontalLayout();
-    headerLayout.addClassNames(
-        AlignItems.CENTER,
-        Position.RELATIVE,
-        JustifyContent.BETWEEN
-    );
+    headerLayout.addClassName("fc-days-selector-header-layout");
 
     weekendChip = new Chip();
     weekdaysChip = new Chip();
@@ -296,11 +261,7 @@ public class RecurrentScheduleField
     );
     weekDaySelector.addValueChangeListener(ev -> updateValue());
     weekDaySelector.setFirstDayOfWeek(DayOfWeek.SUNDAY);
-    weekDaySelector.addClassNames(
-        AlignSelf.CENTER,
-        Padding.NONE,
-        Margin.NONE
-    );
+    weekDaySelector.addClassName("fc-days-selector-day-selector");
 
     weekendChip.onPress(checked -> {
       if (checked) {
@@ -347,7 +308,7 @@ public class RecurrentScheduleField
 
   private Component getTimeSelectors() {
     VerticalLayout layout = new VerticalLayout();
-    layout.addClassNames(AlignItems.STRETCH, Padding.NONE, Gap.XSMALL);
+    layout.addClassName("fc-time-selector-layout");
 
     timesTitle = new H5();
 
@@ -386,14 +347,14 @@ public class RecurrentScheduleField
     timeDivider = new SpanLine();
 
     HorizontalLayout headerLayout = new HorizontalLayout();
-    headerLayout.addClassNames(AlignItems.CENTER, Position.RELATIVE, JustifyContent.BETWEEN);
+    headerLayout.addClassName("fc-time-selector-header-layout");
 
     timeCircle = new Circle();
 
     headerLayout.add(timeCircle, timesTitle, timeChipGroup);
 
     HorizontalLayout selectorLayout = new HorizontalLayout();
-    selectorLayout.addClassNames(Gap.SMALL);
+    selectorLayout.addClassName("fc-time-selector-selector-layout");
     selectorLayout.add(startTimePicker, timeDivider, endTimePicker);
 
     layout.add(headerLayout, selectorLayout);

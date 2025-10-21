@@ -28,7 +28,6 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.theme.lumo.LumoUtility.AlignItems;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -46,7 +45,6 @@ public class StatesDemo extends VerticalLayout {
 
   public StatesDemo() {
     setSizeFull();
-    addClassNames(AlignItems.CENTER);
 
     // Component creation using an initial value
     DateTimeRange dtr = new DateTimeRange(
@@ -103,10 +101,6 @@ public class StatesDemo extends VerticalLayout {
           )
       );
     }
-
-    buttonLayout.setAlignItems(Alignment.CENTER);
-    readOnlyLayout.setAlignItems(Alignment.CENTER);
-    visibleLayout.setAlignItems(Alignment.CENTER);
 
     buttonLayout.add(indicatorButton, readOnlyLayout, visibleLayout);
     add(field, buttonLayout);
